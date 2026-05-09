@@ -1,0 +1,491 @@
+/* Modern WooCommerce Styles for Brimstone Hill */
+
+/* Variables and Resets */
+:root {
+	--wc-border-radius: 8px;
+	--wc-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	--wc-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ==============================================
+   Single Product Page
+   ============================================== */
+.bh-modern-product {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2rem;
+	max-width: var(--container-max);
+	margin: 0 auto;
+	padding: var(--space-xl) var(--space-md);
+}
+
+.bh-modern-product-image {
+	flex: 1 1 50%;
+	min-width: 300px;
+}
+
+.bh-modern-product-image img {
+	width: 100%;
+	height: auto;
+	border-radius: var(--wc-border-radius);
+	box-shadow: var(--wc-shadow);
+	object-fit: cover;
+	aspect-ratio: 4/3;
+}
+
+.bh-modern-product-summary {
+	flex: 1 1 40%;
+	min-width: 300px;
+	background: #ffffff;
+	border-radius: var(--wc-border-radius);
+	padding: var(--space-xl);
+	box-shadow: var(--wc-shadow);
+	display: flex;
+	flex-direction: column;
+	position: sticky;
+	top: calc(var(--header-height) + 20px);
+}
+
+.bh-modern-product-title {
+	font-family: var(--font-heading);
+	color: var(--color-primary);
+	font-size: 2.5rem;
+	margin-top: 0;
+	margin-bottom: var(--space-sm);
+	line-height: 1.2;
+}
+
+.bh-modern-product-price {
+	font-size: 1.5rem;
+	color: var(--color-secondary);
+	font-weight: bold;
+	margin-bottom: var(--space-md);
+}
+
+.bh-modern-product-excerpt {
+	color: var(--color-text-muted);
+	line-height: 1.6;
+	margin-bottom: var(--space-xl);
+	font-size: 1.1rem;
+}
+
+/* Custom Quantity Selector */
+.bh-quantity-wrapper {
+	display: flex;
+	align-items: center;
+	margin-bottom: var(--space-lg);
+	background: var(--color-bg);
+	border-radius: var(--wc-border-radius);
+	overflow: hidden;
+	width: max-content;
+	border: 1px solid var(--color-border);
+}
+
+.bh-quantity-btn {
+	background: none;
+	border: none;
+	color: var(--color-primary);
+	font-size: 1.5rem;
+	width: 44px;
+	height: 44px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s;
+}
+
+.bh-quantity-btn:hover {
+	background: var(--color-border);
+}
+
+.bh-modern-product-summary form.cart .quantity {
+	display: none !important; /* Hide original */
+}
+
+.bh-quantity-display {
+	width: 50px;
+	text-align: center;
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: var(--color-text);
+}
+
+/* Add to Cart Button */
+.bh-modern-product-summary .single_add_to_cart_button {
+	background-color: var(--color-primary);
+	color: white;
+	border: none;
+	padding: 1rem 2rem;
+	font-size: 1.1rem;
+	font-weight: bold;
+	border-radius: var(--wc-border-radius);
+	cursor: pointer;
+	width: 100%;
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.bh-modern-product-summary .single_add_to_cart_button:hover {
+	background-color: var(--color-primary-hover);
+	transform: translateY(-2px);
+	box-shadow: var(--wc-shadow-hover);
+}
+
+/* Badges */
+.bh-trust-badges {
+	margin-top: var(--space-xl);
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	border-top: 1px solid var(--color-border);
+	padding-top: var(--space-md);
+}
+
+.bh-trust-badge {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var(--color-text-muted);
+	font-size: 0.95rem;
+}
+
+.bh-trust-badge svg {
+	width: 20px;
+	height: 20px;
+	fill: var(--color-secondary);
+}
+
+/* ==============================================
+   Cart Page
+   ============================================== */
+.woocommerce-cart .woocommerce {
+	max-width: var(--container-max);
+	margin: 0 auto;
+	padding: var(--space-xl) var(--space-md);
+}
+
+.woocommerce-cart table.shop_table {
+	border-collapse: separate;
+	border-spacing: 0 1rem;
+	border: none;
+	width: 100%;
+}
+
+.woocommerce-cart table.shop_table th {
+	background: transparent;
+	border: none;
+	text-transform: uppercase;
+	font-size: 0.85rem;
+	color: var(--color-text-muted);
+	padding-bottom: 0;
+}
+
+.woocommerce-cart table.shop_table td {
+	background: #ffffff;
+	border-top: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
+	padding: 1.5rem 1rem;
+	vertical-align: middle;
+}
+
+.woocommerce-cart table.shop_table tr.cart_item td:first-child {
+	border-left: 1px solid var(--color-border);
+	border-top-left-radius: var(--wc-border-radius);
+	border-bottom-left-radius: var(--wc-border-radius);
+}
+
+.woocommerce-cart table.shop_table tr.cart_item td:last-child {
+	border-right: 1px solid var(--color-border);
+	border-top-right-radius: var(--wc-border-radius);
+	border-bottom-right-radius: var(--wc-border-radius);
+}
+
+.woocommerce-cart .cart-collaterals {
+	background: #ffffff;
+	border: 1px solid var(--color-border);
+	border-radius: var(--wc-border-radius);
+	padding: var(--space-xl);
+	margin-top: var(--space-xl);
+	box-shadow: var(--wc-shadow);
+}
+
+.woocommerce-cart .checkout-button {
+	background-color: var(--color-primary);
+	color: white;
+	border-radius: var(--wc-border-radius);
+	padding: 1rem;
+	font-weight: bold;
+	display: block;
+	text-align: center;
+	transition: background 0.3s ease;
+}
+
+.woocommerce-cart .checkout-button:hover {
+	background-color: var(--color-primary-hover);
+}
+
+/* ==============================================
+   Checkout Page
+   ============================================== */
+.woocommerce-checkout .woocommerce {
+	max-width: var(--container-max);
+	margin: 0 auto;
+	padding: var(--space-xl) var(--space-md);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 3rem;
+}
+
+.woocommerce-checkout form.checkout {
+	display: contents; /* Allows flexbox to work on children */
+}
+
+#customer_details {
+	flex: 1 1 55%;
+}
+
+#order_review_heading,
+#order_review {
+	flex: 1 1 35%;
+	min-width: 350px;
+}
+
+#order_review {
+	background: #ffffff;
+	border-radius: var(--wc-border-radius);
+	padding: var(--space-xl);
+	box-shadow: var(--wc-shadow);
+	position: sticky;
+	top: calc(var(--header-height) + 20px);
+	border: 1px solid var(--color-border);
+}
+
+#order_review_heading {
+	font-family: var(--font-heading);
+	color: var(--color-primary);
+	margin-bottom: 0;
+}
+
+.woocommerce-checkout input[type="text"],
+.woocommerce-checkout input[type="email"],
+.woocommerce-checkout input[type="tel"],
+.woocommerce-checkout textarea,
+.woocommerce-checkout .select2-container .select2-selection--single {
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	padding: 0.75rem;
+	background: var(--color-bg);
+}
+
+.woocommerce-checkout input:focus,
+.woocommerce-checkout textarea:focus {
+	outline: none;
+	border-color: var(--color-secondary);
+	box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.2);
+}
+
+#place_order {
+	background-color: var(--color-primary);
+	color: white;
+	border: none;
+	padding: 1rem;
+	font-size: 1.1rem;
+	font-weight: bold;
+	border-radius: var(--wc-border-radius);
+	width: 100%;
+	transition: all 0.3s ease;
+	margin-top: var(--space-md);
+}
+
+#place_order:hover {
+	background-color: var(--color-primary-hover);
+	transform: translateY(-2px);
+}
+
+/* ==============================================
+   Book Tickets Page Custom Layout
+   ============================================== */
+.page-book-tickets .book-tickets-layout {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 2rem;
+}
+
+@media (min-width: 768px) {
+	.page-book-tickets .book-tickets-layout {
+		grid-template-columns: 2fr 1fr;
+		gap: 3rem;
+	}
+}
+
+.book-tickets-form {
+	background: #ffffff;
+	border-radius: var(--wc-border-radius);
+	padding: var(--space-xl);
+	box-shadow: var(--wc-shadow);
+	margin-bottom: var(--space-xl);
+}
+
+.book-tickets-form .form-section {
+	margin-bottom: var(--space-xl);
+	padding-bottom: var(--space-xl);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.book-tickets-form .form-section:last-of-type {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.book-tickets-form h2 {
+	font-family: var(--font-heading);
+	color: var(--color-primary);
+	font-size: 1.5rem;
+	margin-top: 0;
+	margin-bottom: var(--space-md);
+}
+
+.book-tickets-form .form-group label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: var(--space-xs);
+	color: var(--color-text);
+}
+
+.book-tickets-form .form-control {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	background: var(--color-bg);
+	font-size: 1rem;
+	color: var(--color-text);
+}
+
+.book-tickets-form .form-control:focus {
+	outline: none;
+	border-color: var(--color-secondary);
+	box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.2);
+}
+
+.book-tickets-form .description {
+	font-size: 0.85rem;
+	color: var(--color-text-muted);
+	margin-top: var(--space-xs);
+}
+
+.ticket-type-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--space-md) 0;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.ticket-type-row:last-child {
+	border-bottom: none;
+}
+
+.ticket-info h3 {
+	margin: 0 0 var(--space-xs) 0;
+	font-size: 1.1rem;
+	color: var(--color-text);
+}
+
+.ticket-info p {
+	margin: 0 0 var(--space-xs) 0;
+	font-size: 0.9rem;
+	color: var(--color-text-muted);
+}
+
+.ticket-price {
+	font-weight: bold;
+	color: var(--color-secondary);
+	font-size: 1.1rem;
+}
+
+.ticket-controls {
+	display: flex;
+	align-items: center;
+	background: var(--color-bg);
+	border-radius: var(--wc-border-radius);
+	border: 1px solid var(--color-border);
+	overflow: hidden;
+}
+
+.ticket-controls .btn-qty {
+	background: none;
+	border: none;
+	color: var(--color-primary);
+	font-size: 1.5rem;
+	width: 40px;
+	height: 40px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s;
+}
+
+.ticket-controls .btn-qty:hover {
+	background: var(--color-border);
+}
+
+.ticket-controls .qty-input {
+	width: 50px;
+	text-align: center;
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: var(--color-text);
+	border: none;
+	background: transparent;
+	padding: 0;
+	-moz-appearance: textfield;
+}
+
+.ticket-controls .qty-input::-webkit-outer-spin-button,
+.ticket-controls .qty-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.booking-summary-sticky {
+	background: var(--color-bg-alt);
+	padding: var(--space-lg);
+	border-radius: var(--wc-border-radius);
+	margin-top: var(--space-xl);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+}
+
+.booking-total {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: var(--color-text);
+}
+
+#booking-total-price {
+	color: var(--color-secondary);
+}
+
+.booking-summary-sticky .btn--primary {
+	width: 100%;
+	padding: 1rem;
+	font-size: 1.1rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.booking-summary-sticky .btn--primary:disabled {
+	background-color: var(--color-text-muted);
+	cursor: not-allowed;
+	opacity: 0.7;
+	transform: none;
+	box-shadow: none;
+}
