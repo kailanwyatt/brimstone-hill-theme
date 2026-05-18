@@ -3,23 +3,43 @@
   if (!root) return;
 
   var form = root.querySelector('#bh-donate-form');
-  var thanks = root.querySelector('#bh-donate-thanks');
-  var thanksEmail = root.querySelector('#bh-donate-thanks-email');
+  if (!form) return;
+
+  var cfg =
+    typeof bhDonate === 'object' && bhDonate !== null
+      ? bhDonate
+      : { min: 1, max: 999999.99, decimals: 2, currencySymbol: '$' };
+
+  var amountHidden = root.querySelector('#bh-donation-amount');
   var presetBtns = root.querySelectorAll('.donate-amount__btn[data-amount]');
   var otherBtn = root.querySelector('.donate-amount__btn--other');
   var otherWrap = root.querySelector('#bh-donate-other-wrap');
   var otherInput = root.querySelector('#donate-other');
-  var recurring = root.querySelector('#bh-donate-recurring');
-  var emailInput = root.querySelector('#donate-email');
   var submitBtn = root.querySelector('#bh-donate-submit');
   var summary = root.querySelector('#bh-donate-summary');
 
   var selectedPreset = null;
   var otherMode = false;
 
+  function decimals() {
+    var d = parseInt(cfg.decimals, 10);
+    return Number.isFinite(d) && d >= 0 ? d : 2;
+  }
+
+  function clampAmount(n) {
+    var min = parseFloat(cfg.min);
+    var max = parseFloat(cfg.max);
+    if (!Number.isFinite(min)) min = 1;
+    if (!Number.isFinite(max)) max = 999999.99;
+    if (n < min) return min;
+    if (n > max) return max;
+    return n;
+  }
+
   function parseAmount() {
-    if (otherMode) {
-      var n = parseFloat(String(otherInput.value || '').replace(',', '.'));
+    if (otherMode && otherInput) {
+      var raw = String(otherInput.value || '').replace(',', '.');
+      var n = parseFloat(raw);
       return Number.isFinite(n) ? n : 0;
     }
     if (selectedPreset != null) return selectedPreset;
@@ -27,22 +47,32 @@
   }
 
   function formatMoney(n) {
-    return n.toFixed(2);
+    return n.toFixed(decimals());
+  }
+
+  function syncHidden() {
+    if (!amountHidden) return;
+    var amt = parseAmount();
+    if (amt > 0) {
+      var rounded = clampAmount(amt);
+      amountHidden.value = formatMoney(rounded);
+    } else {
+      amountHidden.value = '';
+    }
   }
 
   function syncState() {
+    syncHidden();
     var amt = parseAmount();
     var okAmount = amt > 0;
-    var okEmail = String(emailInput.value || '').trim().length > 0;
-    submitBtn.disabled = !(okAmount && okEmail);
+    submitBtn.disabled = !okAmount;
 
     if (okAmount) {
       summary.hidden = false;
-      var line =
-        'Amount: USD $' +
-        formatMoney(amt) +
-        (recurring.checked ? ' per month' : '');
-      summary.textContent = line;
+      summary.textContent =
+        'Amount: ' +
+        (cfg.currencySymbol || '$') +
+        formatMoney(clampAmount(amt));
     } else {
       summary.hidden = true;
       summary.textContent = '';
@@ -79,22 +109,23 @@
   if (otherInput) {
     otherInput.addEventListener('input', syncState);
   }
-  emailInput.addEventListener('input', syncState);
-  if (recurring) {
-    recurring.addEventListener('change', syncState);
-  }
 
   form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var amt = parseAmount();
-    var email = String(emailInput.value || '').trim();
-    if (!(amt > 0) || !email) {
+    syncHidden();
+    var amt = clampAmount(parseAmount());
+    var min = parseFloat(cfg.min);
+    var max = parseFloat(cfg.max);
+    if (!Number.isFinite(min)) min = 1;
+    if (!Number.isFinite(max)) max = 999999.99;
+
+    if (!(amt > 0) || amt < min || amt > max) {
+      e.preventDefault();
       syncState();
       return;
     }
-    form.hidden = true;
-    thanks.hidden = false;
-    thanksEmail.textContent = email;
-    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (amountHidden) {
+      amountHidden.value = formatMoney(amt);
+    }
   });
 })();

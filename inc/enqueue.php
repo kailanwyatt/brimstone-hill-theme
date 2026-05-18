@@ -27,8 +27,20 @@ function bh_enqueue_scripts() {
 		wp_enqueue_script( 'bh-book-tickets', BH_THEME_URI . '/assets/js/book-tickets.js', array(), BH_THEME_VERSION, true );
 	}
 
-	if ( is_page( 'donate' ) ) {
+	if ( is_page_template( 'page-donate.php' ) || is_page( 'donate' ) ) {
 		wp_enqueue_script( 'bh-donate-page', BH_THEME_URI . '/assets/js/donate-page.js', array(), BH_THEME_VERSION, true );
+		if ( class_exists( 'WooCommerce' ) && function_exists( 'bh_donate_is_ready' ) && bh_donate_is_ready() ) {
+			wp_localize_script(
+				'bh-donate-page',
+				'bhDonate',
+				array(
+					'min'            => function_exists( 'bh_donation_min_amount' ) ? bh_donation_min_amount() : 1,
+					'max'            => function_exists( 'bh_donation_max_amount' ) ? bh_donation_max_amount() : 999999.99,
+					'decimals'       => function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2,
+					'currencySymbol' => function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$',
+				)
+			);
+		}
 	}
 
 	if ( is_singular( 'bhfp_gallery' ) ) {

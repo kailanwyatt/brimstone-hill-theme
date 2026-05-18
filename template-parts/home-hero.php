@@ -26,7 +26,7 @@ $subtitle  = get_option( 'bh_home_hero_subtitle', 'UNESCO World Heritage Site ·
 		<h1 class="hero__title"><?php echo esc_html( $title ); ?></h1>
 		<p class="hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
 		<div class="hero__actions">
-			<a href="<?php echo esc_url( home_url( '/visit/book-tickets' ) ); ?>" class="btn btn--primary">Book tickets</a>
+			<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="btn btn--primary"><?php echo esc_html( bh_book_tickets_label() ); ?></a>
 			<a href="<?php echo esc_url( home_url( '/visit/plan-your-visit' ) ); ?>" class="btn btn--secondary">Plan your visit</a>
 			<a href="<?php echo esc_url( home_url( '/events/whats-on' ) ); ?>" class="btn btn--secondary">What's on</a>
 		</div>

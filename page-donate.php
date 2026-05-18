@@ -1,38 +1,62 @@
 <?php
 /**
- * Donate — page slug "donate" (e.g. /get-involved/donate). Replaces broken imported JSX with a working mock form.
+ * Donate — page slug "donate" (e.g. /get-involved/donate). WooCommerce product with dynamic amount.
  *
  * @package Brimstone_Hill
  */
 
 if ( ! function_exists( 'bh_render_donate_page_markup' ) ) {
 	/**
-	 * Donate form markup (mock checkout — mirrors the prototype behaviour).
+	 * Donate form: POST add-to-cart with validated amount for the configured donation product.
 	 *
 	 * @return void
 	 */
 	function bh_render_donate_page_markup() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations require WooCommerce. Please contact us if you need help.', 'brimstone-hill' ) . '</p>';
+			return;
+		}
+
+		if ( ! function_exists( 'bh_get_donation_product_id' ) || ! bh_get_donation_product_id() ) {
+			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations are not configured yet. Create a virtual product with type “Donation (simple)” under Products → Add new, then set Settings → Brimstone Hill → Commerce → Donation product ID.', 'brimstone-hill' ) . '</p>';
+			return;
+		}
+		if ( ! function_exists( 'bh_donate_is_ready' ) || ! bh_donate_is_ready() ) {
+			$wrong_type = '';
+			if ( function_exists( 'wc_get_product' ) ) {
+				$p = wc_get_product( bh_get_donation_product_id() );
+				if ( $p && ! in_array( $p->get_type(), array( 'simple', '' ), true ) ) {
+					$wrong_type = sprintf(
+						/* translators: %s: WooCommerce product type slug */
+						__( ' The product you selected is type “%s”; donations require “Donation (simple)”.', 'brimstone-hill' ),
+						$p->get_type()
+					);
+				}
+			}
+			echo '<p class="donate-page__notice">' . esc_html__( 'The donation product is missing or not purchasable. Use a published virtual “Donation (simple)” product and set its ID under Settings → Brimstone Hill → Commerce.', 'brimstone-hill' ) . esc_html( $wrong_type ) . '</p>';
+			return;
+		}
+
+		$product_id = bh_get_donation_product_id();
+		$presets      = bh_donation_preset_amounts();
+		$currency_sym = function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$';
 		?>
 	<p class="donate-page__intro">
 		<?php esc_html_e( 'Your donation helps preserve the fortress and support education and conservation. Every gift matters.', 'brimstone-hill' ); ?>
 	</p>
 
-	<div class="donate-thanks" id="bh-donate-thanks" hidden>
-		<h2 class="donate-thanks__title"><?php esc_html_e( 'Thank you for your donation', 'brimstone-hill' ); ?></h2>
-		<p class="donate-thanks__text">
-			<?php esc_html_e( 'Receipt will be sent to ', 'brimstone-hill' ); ?>
-			<strong id="bh-donate-thanks-email"></strong>.
-			<?php esc_html_e( 'Your support makes a difference.', 'brimstone-hill' ); ?>
-		</p>
-	</div>
+	<form class="donate-form" id="bh-donate-form" method="post" action="">
+		<?php wp_nonce_field( 'bh_donate', 'bh_donation_nonce' ); ?>
+		<input type="hidden" name="quantity" value="1" />
+		<input type="hidden" name="add-to-cart" value="<?php echo esc_attr( (string) $product_id ); ?>" />
+		<input type="hidden" name="bh_donation_amount" id="bh-donation-amount" value="" autocomplete="off" />
 
-	<form class="donate-form" id="bh-donate-form" novalidate>
 		<section class="donate-amount">
 			<h2 class="donate-form__title"><?php esc_html_e( 'Choose amount', 'brimstone-hill' ); ?></h2>
 			<div class="donate-amount__presets" role="group" aria-label="<?php esc_attr_e( 'Preset amounts', 'brimstone-hill' ); ?>">
-				<?php foreach ( array( 25, 50, 100, 250 ) as $bh_amt ) : ?>
+				<?php foreach ( $presets as $bh_amt ) : ?>
 					<button type="button" class="donate-amount__btn" data-amount="<?php echo esc_attr( (string) $bh_amt ); ?>">
-						$<?php echo esc_html( (string) $bh_amt ); ?>
+						<?php echo esc_html( $currency_sym . number_format_i18n( $bh_amt, function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2 ) ); ?>
 					</button>
 				<?php endforeach; ?>
 				<button type="button" class="donate-amount__btn donate-amount__btn--other" data-amount-other="1">
@@ -40,37 +64,32 @@ if ( ! function_exists( 'bh_render_donate_page_markup' ) ) {
 				</button>
 			</div>
 			<div class="donate-amount__other" id="bh-donate-other-wrap" hidden>
-				<label for="donate-other"><?php esc_html_e( 'Amount (USD)', 'brimstone-hill' ); ?></label>
+				<label for="donate-other"><?php esc_html_e( 'Amount', 'brimstone-hill' ); ?></label>
 				<input
 					id="donate-other"
 					type="number"
 					min="1"
-					step="1"
-					inputmode="numeric"
+					step="any"
+					inputmode="decimal"
 					class="donate-form__input"
 					autocomplete="transaction-amount"
 				/>
-			</div>
-			<div class="donate-amount__recurring">
-				<label class="donate-form__checkbox">
-					<input type="checkbox" id="bh-donate-recurring" />
-					<span><?php esc_html_e( 'Monthly donation', 'brimstone-hill' ); ?></span>
-				</label>
 			</div>
 		</section>
 
 		<section class="donate-optional">
 			<h3 class="donate-form__subtitle"><?php esc_html_e( 'Optional', 'brimstone-hill' ); ?></h3>
-			<label for="donate-dedication" class="donate-form__label"><?php esc_html_e( 'Dedication (e.g. in memory of …)', 'brimstone-hill' ); ?></label>
+			<label for="bh-dedication" class="donate-form__label"><?php esc_html_e( 'Dedication (e.g. in memory of …)', 'brimstone-hill' ); ?></label>
 			<input
-				id="donate-dedication"
+				id="bh-dedication"
+				name="bh_dedication"
 				type="text"
 				class="donate-form__input"
 				autocomplete="off"
 				placeholder="<?php esc_attr_e( 'Leave blank if not applicable', 'brimstone-hill' ); ?>"
 			/>
 			<label class="donate-form__checkbox">
-				<input type="checkbox" id="bh-donate-anon" />
+				<input type="checkbox" name="bh_anonymous" value="1" id="bh-anonymous" />
 				<span><?php esc_html_e( 'Give anonymously', 'brimstone-hill' ); ?></span>
 			</label>
 		</section>
@@ -78,17 +97,9 @@ if ( ! function_exists( 'bh_render_donate_page_markup' ) ) {
 		<section class="donate-checkout">
 			<h3 class="donate-form__subtitle"><?php esc_html_e( 'Complete your donation', 'brimstone-hill' ); ?></h3>
 			<p class="donate-checkout__summary" id="bh-donate-summary" hidden></p>
-			<label for="donate-email" class="donate-form__label"><?php esc_html_e( 'Email (for receipt)', 'brimstone-hill' ); ?> <span aria-hidden="true">*</span></label>
-			<input
-				id="donate-email"
-				type="email"
-				class="donate-form__input"
-				required
-				autocomplete="email"
-			/>
-			<p class="donate-form__card-note"><?php esc_html_e( 'Card brands: Visa, Mastercard, Discover.', 'brimstone-hill' ); ?></p>
+			<p class="donate-form__card-note"><?php esc_html_e( 'You will complete payment securely on the next step (same cards your store accepts at checkout).', 'brimstone-hill' ); ?></p>
 			<button type="submit" class="btn btn--primary donate-form__submit" id="bh-donate-submit" disabled>
-				<?php esc_html_e( 'Pay with card (mock)', 'brimstone-hill' ); ?>
+				<?php esc_html_e( 'Continue to checkout', 'brimstone-hill' ); ?>
 			</button>
 		</section>
 	</form>

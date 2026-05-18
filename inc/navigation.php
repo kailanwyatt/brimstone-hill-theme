@@ -9,6 +9,7 @@ function bh_register_menus() {
 	register_nav_menus(
 		array(
 			'primary'         => esc_html__( 'Primary Menu', 'brimstone-hill' ),
+			'footer'          => esc_html__( 'Footer Menu (BH Footer)', 'brimstone-hill' ),
 			'footer-visit'    => esc_html__( 'Footer Visit Links', 'brimstone-hill' ),
 			'footer-discover' => esc_html__( 'Footer Discover Links', 'brimstone-hill' ),
 			'footer-involved' => esc_html__( 'Footer Get Involved Links', 'brimstone-hill' ),

@@ -11,6 +11,6 @@ $hours    = get_option( 'bh_home_admission_hours', 'Open daily 9:30am–5:30pm' 
 			<strong><?php echo esc_html( $entrance ); ?></strong>
 		</p>
 		<p class="admission-hours__hours"><?php echo esc_html( $hours ); ?></p>
-		<a href="<?php echo esc_url( home_url( '/visit/book-tickets' ) ); ?>" class="btn btn--primary admission-hours__btn">Book now</a>
+		<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="btn btn--primary admission-hours__btn"><?php esc_html_e( 'Book now', 'brimstone-hill' ); ?></a>
 	</div>
 </section>

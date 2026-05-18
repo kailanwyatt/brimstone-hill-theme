@@ -7,59 +7,77 @@
 
 get_header();
 
-$membership_categories = array(
-    'captain' => array(
-        'name' => 'Captain (Ordinary Member)',
-        'price_display' => 'XCD$100.00',
-        'benefits' => array(
-            'Free entry for yourself and 2 guests.',
-            '10% discount at the restaurant.',
-            '10% discount at the Gift Shop.'
-        )
-    ),
-    'governor' => array(
-        'name' => 'Governor',
-        'price_display' => 'XCD$1,000.00',
-        'benefits' => array(
-            'Free entry for yourself and 5 guests.',
-            'Free entry for yourself and 1 guest to paid events held by Brimstone Hill.',
-            '10% discount at the restaurant.',
-            '10% discount at the Gift Shop.'
-        )
-    ),
-    'corporate' => array(
-        'name' => 'Corporate General',
-        'price_display' => 'XCD$3,000.00',
-        'benefits' => array(
-            'Free entry for CEO and 10 guests.',
-            '10% discount at restaurant.',
-            '10% discount at the Gift Shop.',
-            'Hosting of two free events at Brimstone Hill Fortress.',
-            'Acknowledgement in each issue of Cannonball.',
-            'Placement of company logo on BHFNPS website.',
-            'Company website link placed on BHFNPS website.'
-        )
-    ),
-    'lieutenant' => array(
-        'name' => 'Lieutenant (University students & Professors)',
-        'price_display' => 'XCD$60.00',
-        'benefits' => array(
-            'Free entry for yourself and 1 guest.',
-            '10% discount at the restaurant.',
-            '10% discount at the Gift Shop.',
-            '*Must present valid Student ID'
-        )
-    ),
-    'non-nationals' => array(
-        'name' => 'Non-Nationals',
-        'price_display' => 'USD$100.00',
-        'benefits' => array(
-            'Free entry for yourself and 2 guests.',
-            '10% discount at the restaurant.',
-            '10% discount at the Gift Shop.'
-        )
-    )
-);
+if ( function_exists( 'bhfp_get_membership_categories' ) ) {
+	$membership_categories = bhfp_get_membership_categories( true );
+} else {
+	$membership_categories = array(
+		'captain'       => array(
+			'name'          => 'Captain (Ordinary Member)',
+			'price_display' => 'XCD$100.00',
+			'product_id'    => 0,
+			'benefits'      => array(
+				'Free entry for yourself and 2 guests.',
+				'10% discount at the restaurant.',
+				'10% discount at the Gift Shop.',
+			),
+		),
+		'governor'      => array(
+			'name'          => 'Governor',
+			'price_display' => 'XCD$1,000.00',
+			'product_id'    => 0,
+			'benefits'      => array(
+				'Free entry for yourself and 5 guests.',
+				'Free entry for yourself and 1 guest to paid events held by Brimstone Hill.',
+				'10% discount at the restaurant.',
+				'10% discount at the Gift Shop.',
+			),
+		),
+		'corporate'     => array(
+			'name'          => 'Corporate General',
+			'price_display' => 'XCD$3,000.00',
+			'product_id'    => 0,
+			'benefits'      => array(
+				'Free entry for CEO and 10 guests.',
+				'10% discount at restaurant.',
+				'10% discount at the Gift Shop.',
+				'Hosting of two free events at Brimstone Hill Fortress.',
+				'Acknowledgement in each issue of Cannonball.',
+				'Placement of company logo on BHFNPS website.',
+				'Company website link placed on BHFNPS website.',
+			),
+		),
+		'lieutenant'    => array(
+			'name'          => 'Lieutenant (University students & Professors)',
+			'price_display' => 'XCD$60.00',
+			'product_id'    => 0,
+			'benefits'      => array(
+				'Free entry for yourself and 1 guest.',
+				'10% discount at the restaurant.',
+				'10% discount at the Gift Shop.',
+				'*Must present valid Student ID',
+			),
+		),
+		'non-nationals' => array(
+			'name'          => 'Non-Nationals',
+			'price_display' => 'USD$100.00',
+			'product_id'    => 0,
+			'benefits'      => array(
+				'Free entry for yourself and 2 guests.',
+				'10% discount at the restaurant.',
+				'10% discount at the Gift Shop.',
+			),
+		),
+	);
+}
+
+$membership_checkout_ready = function_exists( 'bhfp_membership_checkout_is_ready' ) && bhfp_membership_checkout_is_ready();
+$membership_form_categories = array();
+foreach ( $membership_categories as $id => $cat ) {
+	$pid = isset( $cat['product_id'] ) ? (int) $cat['product_id'] : 0;
+	if ( $pid && function_exists( 'bhfp_validate_wc_product_type' ) && bhfp_validate_wc_product_type( $pid, 'bhfp_membership' ) ) {
+		$membership_form_categories[ $id ] = $cat;
+	}
+}
 
 $membership_benefits = array(
     'Support the maintenance and restoration of this national treasure',
@@ -81,6 +99,11 @@ $membership_benefits = array(
     </div>
 
     <div class="container section-padding">
+        <?php if ( ! $membership_checkout_ready ) : ?>
+            <p class="membership-page__notice notice">
+                <?php esc_html_e( 'Online membership checkout is not available yet. Assign a WooCommerce Membership product to each category under Settings → Brimstone Hill → Commerce.', 'brimstone-hill' ); ?>
+            </p>
+        <?php endif; ?>
         <section class="membership-intro text-center">
             <h2 class="membership-intro__headline">Support the preservation of our national treasure and enjoy</h2>
             <p class="membership-intro__blurb lead-text">
@@ -152,15 +175,15 @@ $membership_benefits = array(
                             <label for="member_category">Membership Category <span aria-hidden="true">*</span></label>
                             <select id="member_category" name="category" class="form-control" required>
                                 <option value="">Select category</option>
-                                <?php foreach ($membership_categories as $id => $cat) : ?>
-                                    <option value="<?php echo esc_attr($id); ?>"><?php echo esc_html($cat['name']); ?> — <?php echo esc_html($cat['price_display']); ?></option>
+                                <?php foreach ( $membership_form_categories as $id => $cat ) : ?>
+                                    <option value="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $cat['name'] ); ?> — <?php echo esc_html( $cat['price_display'] ); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
 
                         <p class="description form-note">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</p>
 
-                        <button type="submit" class="btn btn--primary btn--block">Register & Proceed to Payment</button>
+                        <button type="submit" class="btn btn--primary btn--block" <?php disabled( ! $membership_checkout_ready ); ?>>Register & Proceed to Payment</button>
                     </form>
                 </div>
 

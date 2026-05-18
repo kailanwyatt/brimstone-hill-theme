@@ -41,9 +41,9 @@
 			)
 		);
 		?>
-		
-		<a href="<?php echo esc_url( home_url( '/visit/book-tickets' ) ); ?>" class="site-header__book-btn btn btn--primary">
-			Book tickets
+
+		<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="site-header__book-btn btn btn--primary">
+			<?php echo esc_html( bh_book_tickets_label() ); ?>
 		</a>
 
 		<button type="button" class="site-header__menu-btn" aria-label="Open menu" aria-expanded="false">

@@ -1,23 +1,32 @@
 <?php
 /**
- * Announcement Bar (Top Bar)
+ * Announcement Bar (Top Bar) — reads Settings → Brimstone Hill.
+ *
+ * @package Brimstone_Hill
  */
 
-$enabled = get_theme_mod( 'bh_announcement_enabled', true );
-$text    = get_theme_mod( 'bh_announcement_text', 'Open daily 9:30am–5:30pm · Book your visit today' );
+if ( ! bh_announcement_bar_enabled() ) {
+	return;
+}
 
-if ( ! $enabled || empty( $text ) ) {
+$text  = bh_announcement_message();
+$links = bh_announcement_links();
+
+if ( '' === trim( $text ) && empty( $links ) ) {
 	return;
 }
 ?>
 <div class="top-bar">
 	<div class="top-bar__inner container">
-		<p class="top-bar__message"><?php echo wp_kses_post( $text ); ?></p>
-		<nav class="top-bar__links" aria-label="Quick links">
-			<a href="<?php echo esc_url( home_url( '/visit/book-tickets' ) ); ?>" class="top-bar__link">Book now</a>
-			<a href="<?php echo esc_url( home_url( '/get-involved/donate' ) ); ?>" class="top-bar__link">Donate</a>
-			<a href="<?php echo esc_url( home_url( '/events/whats-on' ) ); ?>" class="top-bar__link">What's on</a>
-			<a href="<?php echo esc_url( home_url( '/about/contact' ) ); ?>" class="top-bar__link">Contact</a>
-		</nav>
+		<?php if ( '' !== trim( $text ) ) : ?>
+			<p class="top-bar__message"><?php echo esc_html( $text ); ?></p>
+		<?php endif; ?>
+		<?php if ( ! empty( $links ) ) : ?>
+			<nav class="top-bar__links" aria-label="<?php esc_attr_e( 'Quick links', 'brimstone-hill' ); ?>">
+				<?php foreach ( $links as $link ) : ?>
+					<a href="<?php echo esc_url( $link['url'] ); ?>" class="top-bar__link"><?php echo esc_html( $link['label'] ); ?></a>
+				<?php endforeach; ?>
+			</nav>
+		<?php endif; ?>
 	</div>
 </div>

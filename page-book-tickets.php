@@ -44,6 +44,14 @@ $ticket_types = array(
     </div>
 
     <div class="container section-padding">
+        <?php
+        if ( function_exists( 'bhfp_admission_product_id' ) && function_exists( 'bhfp_validate_wc_product_type' ) ) {
+            $admission_id = bhfp_admission_product_id();
+            if ( ! $admission_id || ! bhfp_validate_wc_product_type( $admission_id, 'bhfp_booking' ) ) {
+                echo '<p class="book-tickets-notice notice">' . esc_html__( 'Online ticket booking is not fully configured. An administrator must set the Admission product ID under Settings → Brimstone Hill → Commerce.', 'brimstone-hill' ) . '</p>';
+            }
+        }
+        ?>
         <div class="book-tickets-layout">
             <div class="book-tickets-form-wrapper">
                 <?php while ( have_posts() ) : the_post(); ?>
