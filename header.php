@@ -42,6 +42,9 @@
 				)
 			);
 			?>
+			<?php if ( function_exists( 'bh_render_social_links' ) ) : ?>
+				<?php bh_render_social_links( array( 'class' => 'bh-social--header' ) ); ?>
+			<?php endif; ?>
 		</div>
 
 		<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="site-header__book-btn btn btn--primary">

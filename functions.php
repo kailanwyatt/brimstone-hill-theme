@@ -17,6 +17,7 @@ require_once BH_THEME_DIR . '/inc/theme-supports.php';
 require_once BH_THEME_DIR . '/inc/enqueue.php';
 require_once BH_THEME_DIR . '/inc/bhfp-bridge.php';
 require_once BH_THEME_DIR . '/inc/navigation.php';
+require_once BH_THEME_DIR . '/inc/social.php';
 require_once BH_THEME_DIR . '/inc/footer.php';
 require_once BH_THEME_DIR . '/inc/sidebar-settings.php';
 require_once BH_THEME_DIR . '/inc/customizer.php';

@@ -76,8 +76,12 @@ while ( have_posts() ) :
 	?>
 <main id="main-content" class="bh-page content-page single-event-page">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-		<?php if ( has_post_thumbnail() ) : ?>
-			<div class="page-banner" style="background-image: url('<?php echo esc_url( get_the_post_thumbnail_url( null, 'full' ) ); ?>');" role="img" aria-label="">
+		<?php
+		$banner_url = class_exists( 'BHFP_Event' ) ? BHFP_Event::get_banner_image_url( $event_id, 'full' ) : ( has_post_thumbnail() ? (string) get_the_post_thumbnail_url( null, 'full' ) : '' );
+		$featured_url = class_exists( 'BHFP_Event' ) ? BHFP_Event::get_featured_image_url( $event_id, 'large' ) : ( has_post_thumbnail() ? (string) get_the_post_thumbnail_url( null, 'large' ) : '' );
+		?>
+		<?php if ( '' !== $banner_url ) : ?>
+			<div class="page-banner" style="background-image: url('<?php echo esc_url( $banner_url ); ?>');" role="img" aria-label="">
 				<div class="page-banner__overlay" aria-hidden="true"></div>
 				<div class="container page-banner__inner">
 					<h1 class="page-banner__title"><?php echo esc_html( $display_title ); ?></h1>
@@ -86,8 +90,14 @@ while ( have_posts() ) :
 		<?php endif; ?>
 
 		<div class="container">
-			<?php if ( ! has_post_thumbnail() ) : ?>
+			<?php if ( '' === $banner_url ) : ?>
 				<h1 class="page-title"><?php echo esc_html( $display_title ); ?></h1>
+			<?php endif; ?>
+
+			<?php if ( '' !== $featured_url && $featured_url !== $banner_url ) : ?>
+				<figure class="single-event__featured">
+					<img src="<?php echo esc_url( $featured_url ); ?>" alt="" loading="lazy" width="1200" height="675" />
+				</figure>
 			<?php endif; ?>
 
 			<p class="single-event__meta">

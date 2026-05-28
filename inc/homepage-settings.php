@@ -48,27 +48,39 @@ function bh_render_homepage_settings_page() {
  */
 function bh_register_homepage_settings() {
 	// Sections
-	add_settings_section( 'bh_home_hero', 'Hero Section', '__return_false', 'bh-homepage-settings' );
-	add_settings_section( 'bh_home_welcome', 'Welcome Section', '__return_false', 'bh-homepage-settings' );
+	add_settings_section(
+		'bh_home_hero',
+		'Hero Video',
+		function () {
+			echo '<p class="description">' . esc_html__( 'Full-width background video at the top of the homepage. Headline and buttons are shown in the Welcome section below the video.', 'brimstone-hill' ) . '</p>';
+		},
+		'bh-homepage-settings'
+	);
+	add_settings_section(
+		'bh_home_welcome',
+		'Welcome Section',
+		function () {
+			echo '<p class="description">' . esc_html__( 'Shown directly below the hero video (headline, intro, and buttons).', 'brimstone-hill' ) . '</p>';
+		},
+		'bh-homepage-settings'
+	);
 	add_settings_section( 'bh_home_admission', 'Admission Section', '__return_false', 'bh-homepage-settings' );
 	add_settings_section( 'bh_home_discover', 'Discover Grid', '__return_false', 'bh-homepage-settings' );
 
-	// Fields for Hero
-	register_setting( 'bh-homepage-settings', 'bh_home_hero_title' );
-	add_settings_field( 'bh_home_hero_title', 'Title', 'bh_render_text_field', 'bh-homepage-settings', 'bh_home_hero', array( 'id' => 'bh_home_hero_title', 'default' => 'Welcome to Brimstone Hill Fortress National Park' ) );
-
-	register_setting( 'bh-homepage-settings', 'bh_home_hero_subtitle' );
-	add_settings_field( 'bh_home_hero_subtitle', 'Subtitle', 'bh_render_textarea_field', 'bh-homepage-settings', 'bh_home_hero', array( 'id' => 'bh_home_hero_subtitle', 'default' => 'UNESCO World Heritage Site · St. Kitts & Nevis. Explore the fortress, discover the story, and plan your visit.' ) );
-
+	// Fields for Hero (video only)
 	register_setting( 'bh-homepage-settings', 'bh_home_hero_video' );
-	add_settings_field( 'bh_home_hero_video', 'Video URL', 'bh_render_text_field', 'bh-homepage-settings', 'bh_home_hero', array( 'id' => 'bh_home_hero_video', 'default' => 'https://player.vimeo.com/video/1049129560?h=baad6d0ed1&autoplay=1&loop=1&autopause=0&muted=1&title=0&byline=0&portrait=0&controls=0&background=1' ) );
+	add_settings_field( 'bh_home_hero_video', 'Vimeo embed URL', 'bh_render_text_field', 'bh-homepage-settings', 'bh_home_hero', array( 'id' => 'bh_home_hero_video', 'default' => 'https://player.vimeo.com/video/1049129560?h=baad6d0ed1&autoplay=1&loop=1&autopause=0&muted=1&title=0&byline=0&portrait=0&controls=0&background=1', 'description' => 'Same Vimeo URL as brimstonehillfortress.org. Use title=0&byline=0&controls=0 for a clean background video.' ) );
+
+	// Legacy hero copy — used by Welcome section when welcome title is still the default.
+	register_setting( 'bh-homepage-settings', 'bh_home_hero_title' );
+	register_setting( 'bh-homepage-settings', 'bh_home_hero_subtitle' );
 
 	register_setting( 'bh-homepage-settings', 'bh_home_hero_image' );
 	add_settings_field( 'bh_home_hero_image', 'Fallback Image URL', 'bh_render_text_field', 'bh-homepage-settings', 'bh_home_hero', array( 'id' => 'bh_home_hero_image', 'default' => '/wp-content/themes/brimstone-hill-ag/assets/images/img-04-1.jpg' ) );
 
 	// Fields for Welcome
 	register_setting( 'bh-homepage-settings', 'bh_home_welcome_title' );
-	add_settings_field( 'bh_home_welcome_title', 'Title', 'bh_render_text_field', 'bh-homepage-settings', 'bh_home_welcome', array( 'id' => 'bh_home_welcome_title', 'default' => 'Welcome!' ) );
+	add_settings_field( 'bh_home_welcome_title', 'Headline', 'bh_render_text_field', 'bh-homepage-settings', 'bh_home_welcome', array( 'id' => 'bh_home_welcome_title', 'default' => 'Welcome to Brimstone Hill Fortress National Park UNESCO World Heritage Site', 'description' => 'Leave as default or customize. If set to “Welcome!” the legacy Hero Title option is used instead.' ) );
 
 	register_setting( 'bh-homepage-settings', 'bh_home_welcome_text' );
 	add_settings_field( 'bh_home_welcome_text', 'Text', 'bh_render_editor_field', 'bh-homepage-settings', 'bh_home_welcome', array( 'id' => 'bh_home_welcome_text', 'default' => 'Brimstone Hill Fortress National Park is a UNESCO World Heritage Site...' ) );

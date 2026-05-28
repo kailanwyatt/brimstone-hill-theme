@@ -23,6 +23,9 @@ if ( ! has_nav_menu( 'primary' ) ) {
 		)
 	);
 	?>
+	<?php if ( function_exists( 'bh_render_social_links' ) ) : ?>
+		<?php bh_render_social_links( array( 'class' => 'bh-social--mobile' ) ); ?>
+	<?php endif; ?>
 	<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="btn btn--primary mobile-nav__cta">
 		<?php echo esc_html( bh_book_tickets_label() ); ?>
 	</a>

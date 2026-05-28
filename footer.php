@@ -33,8 +33,13 @@ $tripadvisor   = function_exists( 'bh_tripadvisor_url' ) ? bh_tripadvisor_url() 
 				<p class="site-footer__cta">
 					<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="btn btn--secondary btn--sm"><?php echo esc_html( bh_book_tickets_label() ); ?></a>
 				</p>
+				<?php if ( function_exists( 'bh_render_social_links' ) ) : ?>
+					<div class="site-footer__social site-footer__social--icons">
+						<?php bh_render_social_links( array( 'class' => 'bh-social--footer' ) ); ?>
+					</div>
+				<?php endif; ?>
 				<?php if ( '' !== $tripadvisor ) : ?>
-					<p class="site-footer__social">
+					<p class="site-footer__tripadvisor">
 						<a href="<?php echo esc_url( $tripadvisor ); ?>" class="site-footer__external" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Reviews on Tripadvisor', 'brimstone-hill' ); ?></a>
 					</p>
 				<?php endif; ?>
