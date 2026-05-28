@@ -320,66 +320,94 @@
 /* ==============================================
    Book Tickets Page Custom Layout
    ============================================== */
-.book-tickets-channels {
-	margin-bottom: var(--space-xl);
+.book-tickets-peek {
+	text-align: center;
+	margin-bottom: var(--space-md);
 }
 
-.book-tickets-channels__heading {
-	font-family: var(--font-heading);
-	color: var(--color-primary);
-	font-size: 1.35rem;
-	margin: 0 0 var(--space-md);
+.book-tickets-peek__link {
+	display: inline-block;
+	min-width: min(100%, 18rem);
 }
 
-.book-tickets-channels__grid {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--space-md);
+.book-tickets-peek__note {
+	margin: var(--space-sm) 0 0;
 }
 
-@media (min-width: 600px) {
-	.book-tickets-channels__grid {
-		grid-template-columns: repeat(2, 1fr);
-	}
-}
-
-.book-tickets-channel {
+.book-tickets-divider {
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.35rem;
-	padding: var(--space-md) var(--space-lg);
-	border: 2px solid var(--color-border);
-	border-radius: var(--wc-border-radius);
-	background: #fff;
-	text-align: left;
-	cursor: pointer;
-	text-decoration: none;
-	color: inherit;
-	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+	align-items: center;
+	gap: var(--space-md);
+	margin: var(--space-xl) 0;
+	color: var(--color-text-muted);
 }
 
-.book-tickets-channel:hover,
-.book-tickets-channel:focus {
-	border-color: var(--color-secondary);
-	box-shadow: var(--wc-shadow);
+.book-tickets-divider::before,
+.book-tickets-divider::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+	background: var(--color-border);
 }
 
-.book-tickets-channel--active {
-	border-color: var(--color-primary);
-	box-shadow: var(--wc-shadow);
-}
-
-.book-tickets-channel__title {
+.book-tickets-divider__label {
 	font-weight: 700;
-	font-size: 1.05rem;
+	font-size: 0.875rem;
+	letter-spacing: 0.12em;
 	color: var(--color-primary);
 }
 
-.book-tickets-channel__desc {
-	font-size: 0.9rem;
-	color: var(--color-text-muted);
-	line-height: 1.4;
+/* Book tickets page header (no featured image) */
+.page-book-tickets__hero {
+	background: linear-gradient(
+		135deg,
+		var(--color-primary) 0%,
+		var(--color-primary-hover) 42%,
+		var(--color-secondary) 100%
+	);
+	color: #fff;
+	padding: clamp(2.25rem, 5vw, 3.25rem) 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.page-book-tickets__hero-inner {
+	max-width: 42rem;
+}
+
+.page-book-tickets__hero-title {
+	font-family: var(--font-heading);
+	font-size: clamp(1.75rem, 4vw, 2.5rem);
+	line-height: 1.15;
+	margin: 0 0 0.65rem;
+	color: #fff;
+}
+
+.page-book-tickets__hero-lede {
+	margin: 0;
+	font-size: 1.05rem;
+	line-height: 1.55;
+	color: rgba(255, 255, 255, 0.92);
+	max-width: 38rem;
+}
+
+.page-book-tickets .page-banner__lede {
+	position: relative;
+	z-index: 1;
+	margin: 0.5rem 0 0;
+	max-width: 38rem;
+	font-size: 1.05rem;
+	line-height: 1.5;
+	color: rgba(255, 255, 255, 0.92);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.page-book-tickets__body {
+	padding-top: var(--space-section);
+	padding-bottom: var(--space-section);
+}
+
+.page-book-tickets .book-tickets-content {
+	margin-bottom: var(--space-lg);
 }
 
 .page-book-tickets .book-tickets-layout {

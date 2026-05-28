@@ -13,27 +13,16 @@ if ( ! function_exists( 'bh_render_donate_page_markup' ) ) {
 	 */
 	function bh_render_donate_page_markup() {
 		if ( ! class_exists( 'WooCommerce' ) ) {
-			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations require WooCommerce. Please contact us if you need help.', 'brimstone-hill' ) . '</p>';
+			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations are not available at the moment. Please contact us for other ways to give.', 'brimstone-hill' ) . '</p>';
 			return;
 		}
 
 		if ( ! function_exists( 'bh_get_donation_product_id' ) || ! bh_get_donation_product_id() ) {
-			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations are not configured yet. Create a virtual product with type “Donation (simple)” under Products → Add new, then set Settings → Brimstone Hill → Commerce → Donation product ID.', 'brimstone-hill' ) . '</p>';
+			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations are not available yet. Please contact us for assistance.', 'brimstone-hill' ) . '</p>';
 			return;
 		}
 		if ( ! function_exists( 'bh_donate_is_ready' ) || ! bh_donate_is_ready() ) {
-			$wrong_type = '';
-			if ( function_exists( 'wc_get_product' ) ) {
-				$p = wc_get_product( bh_get_donation_product_id() );
-				if ( $p && ! in_array( $p->get_type(), array( 'simple', '' ), true ) ) {
-					$wrong_type = sprintf(
-						/* translators: %s: WooCommerce product type slug */
-						__( ' The product you selected is type “%s”; donations require “Donation (simple)”.', 'brimstone-hill' ),
-						$p->get_type()
-					);
-				}
-			}
-			echo '<p class="donate-page__notice">' . esc_html__( 'The donation product is missing or not purchasable. Use a published virtual “Donation (simple)” product and set its ID under Settings → Brimstone Hill → Commerce.', 'brimstone-hill' ) . esc_html( $wrong_type ) . '</p>';
+			echo '<p class="donate-page__notice">' . esc_html__( 'Online donations are temporarily unavailable. Please contact us for assistance.', 'brimstone-hill' ) . '</p>';
 			return;
 		}
 

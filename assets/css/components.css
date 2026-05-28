@@ -25,6 +25,28 @@
   color: #fff;
 }
 
+.btn:visited,
+.btn--primary:visited,
+.btn-primary:visited,
+.btn--secondary:visited,
+.btn-secondary:visited,
+.btn--outline:visited {
+  color: #fff;
+}
+
+.btn--primary:visited,
+.btn-primary:visited {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn--secondary:visited,
+.btn-secondary:visited,
+.btn--outline:visited {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
 .btn--secondary,
 .btn-secondary,
 .btn--outline {
@@ -805,6 +827,9 @@ body.mobile-nav-open {
 
 .single-event__actions {
   margin-top: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
 }
 
 .single-event__nav {
@@ -815,19 +840,25 @@ body.mobile-nav-open {
   align-items: center;
 }
 
-.single-event__nav a {
+.single-event__nav a:not(.btn, .button) {
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
 }
 
-.single-event__nav a:visited {
+.single-event__nav a:not(.btn, .button):visited {
   color: var(--color-primary);
 }
 
-.single-event__nav a:hover {
+.single-event__nav a:not(.btn, .button):hover {
   color: var(--color-primary-hover);
   text-decoration: underline;
+}
+
+.single-event__actions .btn:visited,
+.single-event__nav .btn:visited {
+  color: #fff;
+  text-decoration: none;
 }
 
 .single-event__nav div:last-child {

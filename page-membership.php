@@ -101,7 +101,7 @@ $membership_benefits = array(
     <div class="container section-padding">
         <?php if ( ! $membership_checkout_ready ) : ?>
             <p class="membership-page__notice notice">
-                <?php esc_html_e( 'Online membership checkout is not available yet. Assign a WooCommerce Membership product to each category under Settings → Brimstone Hill → Commerce.', 'brimstone-hill' ); ?>
+                <?php esc_html_e( 'Online membership checkout is not available yet. Please contact the office for assistance.', 'brimstone-hill' ); ?>
             </p>
         <?php endif; ?>
         <section class="membership-intro text-center">

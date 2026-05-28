@@ -14,74 +14,81 @@ if ( class_exists( 'BHFP_Booking_Public' ) ) {
 	$future_events = BHFP_Event::get_future_events_for_booking();
 }
 
+$preselect_event_id = class_exists( 'BHFP_Booking_Public' )
+	? BHFP_Booking_Public::preselect_event_id_from_request()
+	: 0;
+$preselect_visit_date = class_exists( 'BHFP_Booking_Public' )
+	? BHFP_Booking_Public::preselect_visit_date_from_request( $preselect_event_id )
+	: '';
+
 $peek_url = function_exists( 'bhfp_peek_pro_booking_url' ) ? bhfp_peek_pro_booking_url() : '';
 $has_peek = function_exists( 'bhfp_has_peek_pro_booking' ) ? bhfp_has_peek_pro_booking() : ( '' !== $peek_url );
 
-$ticket_types = array(
-	'adult' => array(
-		'label' => __( 'Adult (13+)', 'brimstone-hill' ),
-		'price' => 15,
-		'desc'  => __( 'Standard admission', 'brimstone-hill' ),
-	),
-	'child' => array(
-		'label' => __( 'Child (Under 13)', 'brimstone-hill' ),
-		'price' => 5,
-		'desc'  => __( 'Must be accompanied by an adult', 'brimstone-hill' ),
-	),
-	'local' => array(
-		'label' => __( 'Local Resident', 'brimstone-hill' ),
-		'price' => 0,
-		'desc'  => __( 'Valid ID required at gate', 'brimstone-hill' ),
-	),
-);
+$booking_ready = class_exists( 'BHFP_Booking_Public' ) && BHFP_Booking_Public::is_online_booking_ready();
+
+$initial_tiers = array();
+if ( class_exists( 'BHFP_Booking_Public' ) ) {
+	$initial_tiers = BHFP_Booking_Public::ticket_tiers_for_booking( $preselect_event_id );
+} elseif ( class_exists( 'BHFP_Ticket_Tiers' ) ) {
+	$initial_tiers = BHFP_Ticket_Tiers::get_tiers_for_booking( $preselect_event_id );
+}
 ?>
 
-<main id="primary" class="site-main page-book-tickets">
-	<div class="page-banner page-banner--fallback">
-		<div class="page-banner__overlay" aria-hidden="true"></div>
-		<div class="page-banner__inner container">
-			<h1 class="page-banner__title"><?php the_title(); ?></h1>
-		</div>
-	</div>
-
-	<div class="container section-padding">
-		<?php
-		if ( function_exists( 'bhfp_admission_product_id' ) && function_exists( 'bhfp_validate_wc_product_type' ) ) {
-			$admission_id = bhfp_admission_product_id();
-			if ( ! $admission_id || ! bhfp_validate_wc_product_type( $admission_id, 'bhfp_booking' ) ) {
-				echo '<p class="book-tickets-notice notice">' . esc_html__( 'Online ticket booking is not fully configured. An administrator must set the Admission product ID under Settings → Brimstone Hill → Commerce.', 'brimstone-hill' ) . '</p>';
-			}
-		}
+<main id="main-content" class="site-main page-book-tickets">
+	<?php
+	while ( have_posts() ) :
+		the_post();
+		$has_banner = has_post_thumbnail();
+		$page_lede  = has_excerpt() ? get_the_excerpt() : __( 'Reserve general admission or tickets for an upcoming event.', 'brimstone-hill' );
 		?>
+		<?php if ( $has_banner ) : ?>
+			<div class="page-banner" style="background-image: url('<?php echo esc_url( get_the_post_thumbnail_url( null, 'full' ) ); ?>');" role="img" aria-label="">
+				<div class="page-banner__overlay" aria-hidden="true"></div>
+				<div class="container page-banner__inner">
+					<h1 class="page-banner__title"><?php the_title(); ?></h1>
+					<?php if ( $page_lede ) : ?>
+						<p class="page-banner__lede"><?php echo esc_html( $page_lede ); ?></p>
+					<?php endif; ?>
+				</div>
+			</div>
+		<?php else : ?>
+			<header class="page-book-tickets__hero">
+				<div class="container page-book-tickets__hero-inner">
+					<h1 class="page-book-tickets__hero-title"><?php the_title(); ?></h1>
+					<?php if ( $page_lede ) : ?>
+						<p class="page-book-tickets__hero-lede"><?php echo esc_html( $page_lede ); ?></p>
+					<?php endif; ?>
+				</div>
+			</header>
+		<?php endif; ?>
+
+		<div class="container page-book-tickets__body">
+		<?php if ( ! $booking_ready ) : ?>
+			<p class="book-tickets-notice notice"><?php esc_html_e( 'Online ticket booking is unavailable right now. Please contact the fortress office for assistance, or use the booking link below if one is shown.', 'brimstone-hill' ); ?></p>
+		<?php endif; ?>
 		<div class="book-tickets-layout">
 			<div class="book-tickets-form-wrapper">
-				<?php
-				while ( have_posts() ) :
-					the_post();
-					?>
-					<div class="book-tickets-content">
+				<?php if ( get_the_content() ) : ?>
+					<div class="book-tickets-content content-page__main--prose">
 						<?php the_content(); ?>
 					</div>
-					<?php
-				endwhile;
-				?>
+				<?php endif; ?>
 
-				<div class="book-tickets-channels" role="group" aria-label="<?php esc_attr_e( 'How to book entrance', 'brimstone-hill' ); ?>">
-					<h2 class="book-tickets-channels__heading"><?php esc_html_e( 'How would you like to book?', 'brimstone-hill' ); ?></h2>
-					<div class="book-tickets-channels__grid">
-						<button type="button" class="book-tickets-channel book-tickets-channel--active" data-channel="site" aria-pressed="true">
-							<span class="book-tickets-channel__title"><?php esc_html_e( 'Book on this site', 'brimstone-hill' ); ?></span>
-							<span class="book-tickets-channel__desc"><?php esc_html_e( 'General admission or an upcoming event — checkout with WooCommerce.', 'brimstone-hill' ); ?></span>
-						</button>
-						<?php if ( $has_peek ) : ?>
-							<a href="<?php echo esc_url( $peek_url ); ?>" class="book-tickets-channel book-tickets-channel--peek" target="_blank" rel="noopener noreferrer">
-								<span class="book-tickets-channel__title"><?php esc_html_e( 'Book with Peek Pro', 'brimstone-hill' ); ?></span>
-								<span class="book-tickets-channel__desc"><?php esc_html_e( 'Entrance tickets via your Peek Pro booking page (opens in a new tab).', 'brimstone-hill' ); ?></span>
-							</a>
-						<?php endif; ?>
+				<?php if ( $has_peek ) : ?>
+					<div class="book-tickets-peek">
+						<a href="<?php echo esc_url( $peek_url ); ?>" class="btn btn--secondary book-tickets-peek__link" target="_blank" rel="noopener noreferrer">
+							<?php esc_html_e( 'Book with Peek Pro', 'brimstone-hill' ); ?>
+						</a>
+						<p class="book-tickets-peek__note description"><?php esc_html_e( 'Opens in a new window.', 'brimstone-hill' ); ?></p>
 					</div>
-				</div>
+					<?php if ( $booking_ready ) : ?>
+						<div class="book-tickets-divider" role="separator" aria-label="<?php esc_attr_e( 'Or book on this site', 'brimstone-hill' ); ?>">
+							<span class="book-tickets-divider__label"><?php esc_html_e( 'OR', 'brimstone-hill' ); ?></span>
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
 
+				<?php if ( $booking_ready ) : ?>
 				<form id="bhfp-book-tickets-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="book-tickets-form">
 					<input type="hidden" name="action" value="bhfp_process_booking_form">
 					<?php wp_nonce_field( 'bhfp_booking_form', 'bhfp_booking_nonce' ); ?>
@@ -91,9 +98,9 @@ $ticket_types = array(
 						<div class="form-group">
 							<label for="booking_event"><?php esc_html_e( 'Event', 'brimstone-hill' ); ?></label>
 							<select name="event_id" id="booking_event" class="form-control">
-								<option value="0" selected><?php esc_html_e( 'General Admission', 'brimstone-hill' ); ?></option>
+								<option value="0" <?php selected( $preselect_event_id, 0 ); ?>><?php esc_html_e( 'General Admission', 'brimstone-hill' ); ?></option>
 								<?php foreach ( $future_events as $event_row ) : ?>
-									<option value="<?php echo esc_attr( (string) $event_row['id'] ); ?>"><?php echo esc_html( $event_row['label'] ); ?></option>
+									<option value="<?php echo esc_attr( (string) $event_row['id'] ); ?>" <?php selected( $preselect_event_id, (int) $event_row['id'] ); ?>><?php echo esc_html( $event_row['label'] ); ?></option>
 								<?php endforeach; ?>
 							</select>
 							<?php if ( empty( $future_events ) ) : ?>
@@ -108,34 +115,21 @@ $ticket_types = array(
 						<h2><?php esc_html_e( '2. Visit date (optional)', 'brimstone-hill' ); ?></h2>
 						<div class="form-group">
 							<label for="booking_date"><?php esc_html_e( 'Visit date', 'brimstone-hill' ); ?></label>
-							<input type="date" name="visit_date" id="booking_date" class="form-control" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>">
+							<input type="date" name="visit_date" id="booking_date" class="form-control" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $preselect_visit_date ); ?>">
 							<p class="description"><?php esc_html_e( 'Tickets are valid for any day if no date is selected.', 'brimstone-hill' ); ?></p>
 						</div>
 					</div>
 
 					<div class="form-section">
 						<h2><?php esc_html_e( '3. Select tickets', 'brimstone-hill' ); ?></h2>
-						<div class="ticket-selectors">
-							<?php foreach ( $ticket_types as $key => $type ) : ?>
-								<div class="ticket-type-row" data-price="<?php echo esc_attr( (string) $type['price'] ); ?>" data-key="<?php echo esc_attr( $key ); ?>">
-									<div class="ticket-info">
-										<h3><?php echo esc_html( $type['label'] ); ?></h3>
-										<p><?php echo esc_html( $type['desc'] ); ?></p>
-										<div class="ticket-price">
-											<?php
-											echo $type['price'] > 0
-												? '$' . esc_html( number_format( (float) $type['price'], 2 ) )
-												: esc_html__( 'Free', 'brimstone-hill' );
-											?>
-										</div>
-									</div>
-									<div class="ticket-controls">
-										<button type="button" class="btn-qty btn-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'brimstone-hill' ); ?>">-</button>
-										<input type="number" name="tickets[<?php echo esc_attr( $key ); ?>]" value="0" min="0" max="20" class="qty-input" readonly>
-										<button type="button" class="btn-qty btn-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'brimstone-hill' ); ?>">+</button>
-									</div>
-								</div>
-							<?php endforeach; ?>
+						<div id="booking-ticket-tiers" class="ticket-selectors">
+							<?php
+							if ( class_exists( 'BHFP_Ticket_Tiers' ) && ! empty( $initial_tiers ) ) {
+								BHFP_Ticket_Tiers::render_booking_tier_rows( $initial_tiers );
+							} elseif ( empty( $initial_tiers ) ) {
+								echo '<p class="description book-tickets-no-tiers">' . esc_html__( 'Ticket types are not available right now. Please contact us for assistance.', 'brimstone-hill' ) . '</p>';
+							}
+							?>
 						</div>
 					</div>
 
@@ -149,6 +143,7 @@ $ticket_types = array(
 						</button>
 					</div>
 				</form>
+				<?php endif; ?>
 			</div>
 
 			<div class="book-tickets-sidebar">
@@ -156,6 +151,9 @@ $ticket_types = array(
 			</div>
 		</div>
 	</div>
+		<?php
+	endwhile;
+	?>
 </main>
 
 <?php

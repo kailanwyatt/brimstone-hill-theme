@@ -25,6 +25,40 @@ function bh_enqueue_scripts() {
 
 	if ( is_page_template( 'page-book-tickets.php' ) ) {
 		wp_enqueue_script( 'bh-book-tickets', BH_THEME_URI . '/assets/js/book-tickets.js', array(), BH_THEME_VERSION, true );
+		$tiers_payload = array( '0' => array() );
+		if ( class_exists( 'BHFP_Booking_Public' ) ) {
+			$tiers_payload = BHFP_Booking_Public::ticket_tiers_js_payload();
+		} elseif ( class_exists( 'BHFP_Ticket_Tiers' ) ) {
+			$tiers_payload = BHFP_Ticket_Tiers::get_booking_payload_for_js();
+		}
+		$preselect_event_id = class_exists( 'BHFP_Booking_Public' )
+			? BHFP_Booking_Public::preselect_event_id_from_request()
+			: 0;
+		$preselect_visit_date = class_exists( 'BHFP_Booking_Public' )
+			? BHFP_Booking_Public::preselect_visit_date_from_request( $preselect_event_id )
+			: '';
+
+		wp_localize_script(
+			'bh-book-tickets',
+			'bhBookTickets',
+			array(
+				'tiersByEvent'       => $tiers_payload,
+				'initialEventId'     => $preselect_event_id,
+				'initialVisitDate'   => $preselect_visit_date,
+				'currencySymbol'   => function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$',
+				'decimals'         => function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2,
+				'decimalSeparator' => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
+				'thousandSeparator'=> function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
+				'i18n'             => array(
+					'free'       => __( 'Free', 'brimstone-hill' ),
+					'noTiers'    => __( 'Ticket types are not available right now. Please contact us for assistance.', 'brimstone-hill' ),
+					'decrease'   => __( 'Decrease quantity', 'brimstone-hill' ),
+					'increase'   => __( 'Increase quantity', 'brimstone-hill' ),
+					'processing' => __( 'Processing...', 'brimstone-hill' ),
+					'selectOne'  => __( 'Please select at least one ticket.', 'brimstone-hill' ),
+				),
+			)
+		);
 	}
 
 	if ( is_page_template( 'page-donate.php' ) || is_page( 'donate' ) ) {
