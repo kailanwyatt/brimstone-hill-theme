@@ -194,7 +194,7 @@ $membership_benefits = array(
                         <p class="phone"><a href="tel:869-465-2609">869-465-2609</a></p>
                         <hr>
                         <p class="corporate-note">Contact our office for additional offerings on Corporate packages.</p>
-                        <a href="<?php echo esc_url(site_url('/about/contact')); ?>" class="btn btn--secondary btn--outline mt-sm">Contact Us</a>
+                        <a href="<?php echo esc_url(site_url('/about/contact')); ?>" class="btn btn--secondary mt-sm">Contact Us</a>
                     </div>
                 </div>
             </div>

@@ -33,6 +33,20 @@ body {
   background: var(--color-bg);
 }
 
+/* Site-wide link colors (avoid browser default blue / visited purple).
+   :where() keeps specificity at 0 so header/footer/nav overrides still win. */
+:where(a:not(.btn, .button, .wp-element-button)) {
+  color: var(--color-primary);
+}
+
+:where(a:not(.btn, .button, .wp-element-button):visited) {
+  color: var(--color-primary);
+}
+
+:where(a:not(.btn, .button, .wp-element-button):hover) {
+  color: var(--color-primary-hover);
+}
+
 .container {
   width: 100%;
   max-width: var(--container-max);
@@ -146,16 +160,20 @@ body {
 }
 
 /* Content links (scoped so nav/buttons keep their styling) */
-:where(.content-page__body) a:not(.btn):not(.link--more):not(.link--back) {
+:where(.content-page__body, .content-page__main) a:not(.btn):not(.link--more):not(.link--back) {
   color: var(--color-primary);
   text-decoration: none;
 }
 
-:where(.content-page__body) a:not(.btn):not(.link--more):not(.link--back):hover {
+:where(.content-page__body, .content-page__main) a:not(.btn):not(.link--more):not(.link--back):visited {
+  color: var(--color-primary);
+}
+
+:where(.content-page__body, .content-page__main) a:not(.btn):not(.link--more):not(.link--back):hover {
   color: var(--color-primary-hover);
 }
 
-:where(.content-page__body) a:not(.btn):not(.link--more):not(.link--back):focus-visible {
+:where(.content-page__body, .content-page__main) a:not(.btn):not(.link--more):not(.link--back):focus-visible {
   outline: 3px solid rgba(92, 74, 58, 0.35);
   outline-offset: 3px;
   border-radius: 4px;

@@ -6,7 +6,7 @@
  */
 
 if ( ! defined( 'BH_THEME_VERSION' ) ) {
-	define( 'BH_THEME_VERSION', '1.0.0' );
+	define( 'BH_THEME_VERSION', '1.0.1' );
 }
 
 define( 'BH_THEME_DIR', get_template_directory() );
@@ -17,9 +17,11 @@ require_once BH_THEME_DIR . '/inc/theme-supports.php';
 require_once BH_THEME_DIR . '/inc/enqueue.php';
 require_once BH_THEME_DIR . '/inc/bhfp-bridge.php';
 require_once BH_THEME_DIR . '/inc/navigation.php';
+require_once BH_THEME_DIR . '/inc/footer.php';
 require_once BH_THEME_DIR . '/inc/sidebar-settings.php';
 require_once BH_THEME_DIR . '/inc/customizer.php';
 require_once BH_THEME_DIR . '/inc/homepage-settings.php';
+require_once BH_THEME_DIR . '/inc/merchant-compliance.php';
 
 if ( class_exists( 'WooCommerce' ) ) {
 	require_once BH_THEME_DIR . '/inc/donation.php';

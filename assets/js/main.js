@@ -44,21 +44,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Mobile Menu Toggle ---
     const menuBtn = document.querySelector('.site-header__menu-btn');
     const mobileNav = document.getElementById('mobile-nav');
-    
+    const mobileBackdrop = document.getElementById('mobile-nav-backdrop');
+
+    const setMobileNavOpen = (open) => {
+        if (!menuBtn || !mobileNav) {
+            return;
+        }
+        menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        mobileNav.hidden = !open;
+        if (mobileBackdrop) {
+            mobileBackdrop.hidden = !open;
+            mobileBackdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
+        }
+        document.body.classList.toggle('mobile-nav-open', open);
+    };
+
     if (menuBtn && mobileNav) {
         menuBtn.addEventListener('click', () => {
             const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
-            menuBtn.setAttribute('aria-expanded', !isExpanded);
-            mobileNav.hidden = isExpanded;
+            setMobileNavOpen(!isExpanded);
         });
 
-        // Mobile Nav Submenu toggles
-        const subToggles = mobileNav.querySelectorAll('.mobile-nav__toggle');
-        subToggles.forEach(toggle => {
+        if (mobileBackdrop) {
+            mobileBackdrop.addEventListener('click', () => setMobileNavOpen(false));
+        }
+
+        mobileNav.querySelectorAll('.mobile-nav__trigger').forEach((toggle) => {
             toggle.addEventListener('click', () => {
                 const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
                 const sublist = toggle.nextElementSibling;
-                
+
                 if (sublist && sublist.classList.contains('mobile-nav__sublist')) {
                     toggle.setAttribute('aria-expanded', !isExpanded);
                     sublist.hidden = isExpanded;

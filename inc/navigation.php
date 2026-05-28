@@ -9,10 +9,10 @@ function bh_register_menus() {
 	register_nav_menus(
 		array(
 			'primary'         => esc_html__( 'Primary Menu', 'brimstone-hill' ),
-			'footer'          => esc_html__( 'Footer Menu (BH Footer)', 'brimstone-hill' ),
-			'footer-visit'    => esc_html__( 'Footer Visit Links', 'brimstone-hill' ),
-			'footer-discover' => esc_html__( 'Footer Discover Links', 'brimstone-hill' ),
-			'footer-involved' => esc_html__( 'Footer Get Involved Links', 'brimstone-hill' ),
+			'footer'          => esc_html__( 'Footer (legacy — use column menus)', 'brimstone-hill' ),
+			'footer-visit'    => esc_html__( 'Footer: Visit column', 'brimstone-hill' ),
+			'footer-discover' => esc_html__( 'Footer: Discover column', 'brimstone-hill' ),
+			'footer-involved' => esc_html__( 'Footer: Get involved column', 'brimstone-hill' ),
 			'sidebar-visit'   => esc_html__( 'Sidebar Visit Menu', 'brimstone-hill' ),
 			'sidebar-discover'=> esc_html__( 'Sidebar Discover Menu', 'brimstone-hill' ),
 			'sidebar-learn'   => esc_html__( 'Sidebar Learn Menu', 'brimstone-hill' ),
@@ -21,6 +21,30 @@ function bh_register_menus() {
 	);
 }
 add_action( 'init', 'bh_register_menus' );
+
+/**
+ * On theme activation, assign an existing Brimstone menu to Primary if none is set.
+ */
+function bh_maybe_assign_primary_menu() {
+	$locations = get_theme_mod( 'nav_menu_locations', array() );
+	if ( ! is_array( $locations ) ) {
+		$locations = array();
+	}
+	if ( ! empty( $locations['primary'] ) ) {
+		return;
+	}
+
+	$candidates = array( 'BH Primary', 'Primary Menu', 'Primary Navigation' );
+	foreach ( $candidates as $menu_name ) {
+		$menu = wp_get_nav_menu_object( $menu_name );
+		if ( $menu && ! is_wp_error( $menu ) ) {
+			$locations['primary'] = (int) $menu->term_id;
+			set_theme_mod( 'nav_menu_locations', $locations );
+			return;
+		}
+	}
+}
+add_action( 'after_switch_theme', 'bh_maybe_assign_primary_menu' );
 
 /**
  * Custom Walker to replicate React BEM classes for primary navigation.
@@ -91,6 +115,39 @@ class BH_Primary_Walker_Nav_Menu extends Walker_Nav_Menu {
 			} else {
 				$output .= '<span class="nav__dropdown-label">' . $title . '</span>';
 			}
+			$output .= '</a>';
+		}
+	}
+}
+
+/**
+ * Mobile navigation walker.
+ */
+class BH_Mobile_Walker_Nav_Menu extends Walker_Nav_Menu {
+	public function start_lvl( &$output, $depth = 0, $args = null ) {
+		$output .= '<ul class="mobile-nav__sublist" hidden>';
+	}
+
+	public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+		$classes     = empty( $item->classes ) ? array() : (array) $item->classes;
+		$has_children = in_array( 'menu-item-has-children', $classes, true );
+		$title       = apply_filters( 'the_title', $item->title, $item->ID );
+
+		if ( 0 === (int) $depth ) {
+			$output .= '<li class="mobile-nav__item">';
+			if ( $has_children ) {
+				$output .= '<button type="button" class="mobile-nav__trigger" aria-expanded="false">';
+				$output .= esc_html( $title );
+				$output .= '</button>';
+			} else {
+				$output .= '<a class="mobile-nav__link" href="' . esc_url( $item->url ) . '">';
+				$output .= esc_html( $title );
+				$output .= '</a>';
+			}
+		} else {
+			$output .= '<li>';
+			$output .= '<a class="mobile-nav__link" href="' . esc_url( $item->url ) . '">';
+			$output .= esc_html( $title );
 			$output .= '</a>';
 		}
 	}

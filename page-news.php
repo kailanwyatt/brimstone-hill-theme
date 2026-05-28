@@ -160,7 +160,7 @@ $bh_recent_query = new WP_Query(
 										</h2>
 										<p class="news-feature__excerpt"><?php echo esc_html( get_the_excerpt( $bh_featured ) ); ?></p>
 										<p class="news-feature__cta">
-											<a class="link--more" href="<?php echo esc_url( $bh_f_link ); ?>"><?php esc_html_e( 'Read article', 'brimstone-hill' ); ?></a>
+											<a class="btn btn--secondary btn--sm" href="<?php echo esc_url( $bh_f_link ); ?>"><?php esc_html_e( 'Read article', 'brimstone-hill' ); ?></a>
 										</p>
 									</div>
 								</article>

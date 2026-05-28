@@ -9,7 +9,7 @@ $text = get_option('bh_home_about_text', 'Brimstone Hill and its Fortress is a N
 		<h2 class="section-title">About Brimstone Hill Fortress National Park</h2>
 		<p class="about-park__blurb"><?php echo esc_html($text); ?></p>
 		<p class="about-park__link">
-			<a href="<?php echo esc_url( home_url( '/about/our-story' ) ); ?>" class="link--more">Learn more</a>
+			<a href="<?php echo esc_url( home_url( '/about/our-story' ) ); ?>" class="btn btn--secondary"><?php esc_html_e( 'Learn more', 'brimstone-hill' ); ?></a>
 		</p>
 	</div>
 </section>

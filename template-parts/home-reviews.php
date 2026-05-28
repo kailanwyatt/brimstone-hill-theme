@@ -60,7 +60,7 @@ $reviews = array(
 		</div>
 
 		<p class="featured-reviews__cta">
-			<a class="link--more" href="<?php echo esc_url( bh_tripadvisor_url() ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Read more reviews on TripAdvisor', 'brimstone-hill' ); ?></a>
+			<a class="btn btn--secondary" href="<?php echo esc_url( bh_tripadvisor_url() ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Read more reviews on TripAdvisor', 'brimstone-hill' ); ?></a>
 		</p>
 	</div>
 </section>

@@ -1,5 +1,18 @@
 /* Modern WooCommerce Styles for Brimstone Hill */
 
+/* Theme link colors (override WC purple/blue defaults on storefront). */
+.woocommerce a:not(.button):not(.btn):not(.checkout-button):not(.single_add_to_cart_button):not(.woocommerce-MyAccount-downloads-file) {
+	color: var(--color-primary);
+}
+
+.woocommerce a:not(.button):not(.btn):visited {
+	color: var(--color-primary);
+}
+
+.woocommerce a:not(.button):not(.btn):not(.checkout-button):not(.single_add_to_cart_button):hover {
+	color: var(--color-primary-hover);
+}
+
 /* Variables and Resets */
 :root {
 	--wc-border-radius: 8px;

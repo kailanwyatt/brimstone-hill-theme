@@ -65,7 +65,7 @@ $whats_on_url = function_exists( 'bhfp_page_url' ) ? bhfp_page_url( 'events/what
 		</div>
 
 		<p class="whats-on__more">
-			<a href="<?php echo esc_url( $whats_on_url ); ?>" class="link--more"><?php esc_html_e( 'View all events', 'brimstone-hill' ); ?></a>
+			<a href="<?php echo esc_url( $whats_on_url ); ?>" class="btn btn--secondary"><?php esc_html_e( 'View all events', 'brimstone-hill' ); ?></a>
 		</p>
 	</div>
 </section>

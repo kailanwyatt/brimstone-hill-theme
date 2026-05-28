@@ -12,54 +12,54 @@ if ( ! function_exists( 'bh_annual_events_static_content' ) ) {
 	 * @return void
 	 */
 	function bh_annual_events_static_content() {
+		$upcoming = class_exists( 'BHFP_Public_Chrome' ) ? BHFP_Public_Chrome::get_upcoming_events_display() : array();
+		$annual_like = array();
+		foreach ( $upcoming as $event ) {
+			$title = isset( $event['title'] ) ? (string) $event['title'] : '';
+			$type  = isset( $event['type'] ) ? strtolower( (string) $event['type'] ) : '';
+			$is_annual = false !== stripos( $title, 'annual' ) || false !== stripos( $title, 'festival' ) || in_array( $type, array( 'festival', 'fundraiser', 'community' ), true );
+			if ( $is_annual ) {
+				$annual_like[] = $event;
+			}
+			if ( count( $annual_like ) >= 6 ) {
+				break;
+			}
+		}
 		?>
 	<p>
-		<?php esc_html_e( 'Mark your calendar for the Emancipation Festival, the Annual Fund Run, and other recurring events at Brimstone Hill. These occasions bring the community and visitors together to celebrate heritage, health, and history.', 'brimstone-hill' ); ?>
+		<?php esc_html_e( 'Annual events celebrate the culture and heritage of Brimstone Hill. Use this page for recurring highlights, then check the live calendar for exact dates and programme updates.', 'brimstone-hill' ); ?>
 	</p>
 
 	<section class="content-block">
-		<h2 class="content-block__title"><?php esc_html_e( 'Emancipation Festival', 'brimstone-hill' ); ?></h2>
-		<p>
-			<?php esc_html_e( 'The Emancipation Festival is one of the Caribbean’s most significant cultural events. Held at the fortress, it celebrates freedom and heritage with live music, storytelling, traditional food, and family activities. The festival honours the legacy of those who were enslaved and their descendants, and highlights the role of Brimstone Hill in the island’s history. Dates are announced each year; check What’s on and the Events calendar for details and booking.', 'brimstone-hill' ); ?>
-		</p>
-		<p>
-			<a class="link--more" href="<?php echo esc_url( home_url( '/events/whats-on/' ) ); ?>"><?php esc_html_e( 'What’s on', 'brimstone-hill' ); ?></a>
-			<span class="screen-reader-text">, </span>
-			<a class="link--more" href="<?php echo esc_url( home_url( '/events/calendar/' ) ); ?>"><?php esc_html_e( 'Events calendar', 'brimstone-hill' ); ?></a>
-		</p>
-	</section>
-
-	<section class="content-block">
-		<h2 class="content-block__title"><?php esc_html_e( 'Annual Fund Run', 'brimstone-hill' ); ?></h2>
-		<p>
-			<?php esc_html_e( 'The Annual Fund Run takes participants through the historic grounds of the fortress. All ages are welcome. Proceeds support the Brimstone Hill Fortress National Park Society’s education and conservation work. It’s a great way to stay active and support the park. See the Events calendar for the next date.', 'brimstone-hill' ); ?>
-		</p>
-		<p><a class="link--more" href="<?php echo esc_url( home_url( '/events/calendar/' ) ); ?>"><?php esc_html_e( 'Events calendar', 'brimstone-hill' ); ?></a></p>
-	</section>
-
-	<section class="content-block">
-		<h2 class="content-block__title"><?php esc_html_e( 'Heritage Open Day', 'brimstone-hill' ); ?></h2>
-		<p>
-			<?php esc_html_e( 'Each year we hold a Heritage Open Day with free admission for residents. The day includes special talks, demonstrations, and family activities. It’s an opportunity to celebrate our shared heritage and to introduce new visitors to the fortress.', 'brimstone-hill' ); ?>
-		</p>
-	</section>
-
-	<section class="content-block">
-		<h2 class="content-block__title"><?php esc_html_e( 'Other events', 'brimstone-hill' ); ?></h2>
-		<p>
-			<?php esc_html_e( 'Throughout the year we host guided tours, school programmes, and special events. For the full list of upcoming and past events, visit the Events calendar and What’s on.', 'brimstone-hill' ); ?>
-		</p>
-		<p>
-			<a class="link--more" href="<?php echo esc_url( home_url( '/events/calendar/' ) ); ?>"><?php esc_html_e( 'Events calendar', 'brimstone-hill' ); ?></a>
-			<span class="screen-reader-text">, </span>
-			<a class="link--more" href="<?php echo esc_url( home_url( '/events/whats-on/' ) ); ?>"><?php esc_html_e( 'What’s on', 'brimstone-hill' ); ?></a>
+		<h2 class="content-block__title"><?php esc_html_e( 'Recurring highlights', 'brimstone-hill' ); ?></h2>
+		<?php if ( empty( $annual_like ) ) : ?>
+			<p><?php esc_html_e( 'Annual programme details will be posted here as dates are confirmed. See the events calendar for the latest schedule.', 'brimstone-hill' ); ?></p>
+		<?php else : ?>
+			<ul class="calendar-list">
+				<?php foreach ( $annual_like as $event ) : ?>
+					<li class="calendar-list__item">
+						<time class="calendar-list__date" datetime="<?php echo esc_attr( (string) $event['date'] ); ?>"><?php echo esc_html( BHFP_Public_Chrome::format_calendar_event_dates( $event ) ); ?></time>
+						<span class="calendar-list__type"><?php echo esc_html( strtoupper( (string) $event['type'] ) ); ?></span>
+						<h3 class="calendar-list__title">
+							<a href="<?php echo esc_url( ! empty( $event['url'] ) ? (string) $event['url'] : home_url( '/events/calendar/' ) ); ?>"><?php echo esc_html( (string) $event['title'] ); ?></a>
+						</h3>
+						<?php if ( ! empty( $event['excerpt'] ) ) : ?>
+							<p class="calendar-list__excerpt"><?php echo esc_html( (string) $event['excerpt'] ); ?></p>
+						<?php endif; ?>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+		<p class="annual-events__ctas">
+			<a class="btn btn--secondary" href="<?php echo esc_url( home_url( '/events/whats-on/' ) ); ?>"><?php esc_html_e( 'What’s on', 'brimstone-hill' ); ?></a>
+			<a class="btn btn--secondary" href="<?php echo esc_url( home_url( '/events/calendar/' ) ); ?>"><?php esc_html_e( 'Events calendar', 'brimstone-hill' ); ?></a>
 		</p>
 	</section>
 
 		<?php if ( class_exists( 'BHFP_Public_Chrome' ) ) : ?>
 	<section class="content-block content-block--calendar-teaser" aria-label="<?php esc_attr_e( 'Upcoming dates', 'brimstone-hill' ); ?>">
 		<h2 class="content-block__title"><?php esc_html_e( 'Upcoming dates', 'brimstone-hill' ); ?></h2>
-		<p class="content-block__lede"><?php esc_html_e( 'Dates below combine featured programme items with events managed in WordPress (Operations → Events).', 'brimstone-hill' ); ?></p>
+		<p class="content-block__lede"><?php esc_html_e( 'Upcoming dates from our events programme.', 'brimstone-hill' ); ?></p>
 			<?php echo do_shortcode( '[bhfp_events_list limit="6" intro="0" calendar_link="1"]' ); ?>
 	</section>
 		<?php endif; ?>

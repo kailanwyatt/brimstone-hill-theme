@@ -28,19 +28,21 @@
 			Brimstone Hill
 		</a>
 
-		<?php
-		wp_nav_menu(
-			array(
-				'theme_location'  => 'primary',
-				'menu_id'         => 'primary-menu',
-				'container'       => 'nav',
-				'container_class' => 'nav nav--desktop',
-				'menu_class'      => 'nav__list',
-				'fallback_cb'     => false,
-				'walker'          => new BH_Primary_Walker_Nav_Menu(),
-			)
-		);
-		?>
+		<div class="site-header__nav-wrap">
+			<?php
+			wp_nav_menu(
+				array(
+					'theme_location'  => 'primary',
+					'menu_id'         => 'primary-menu',
+					'container'       => 'nav',
+					'container_class' => 'nav nav--desktop',
+					'menu_class'      => 'nav__list',
+					'fallback_cb'     => false,
+					'walker'          => new BH_Primary_Walker_Nav_Menu(),
+				)
+			);
+			?>
+		</div>
 
 		<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="site-header__book-btn btn btn--primary">
 			<?php echo esc_html( bh_book_tickets_label() ); ?>
@@ -51,3 +53,5 @@
 		</button>
 	</div>
 </header>
+
+<?php get_template_part( 'template-parts/mobile-nav' ); ?>
