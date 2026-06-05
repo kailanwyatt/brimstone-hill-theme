@@ -1046,6 +1046,52 @@ body.home {
   pointer-events: none;
 }
 
+/* Home hero — full-viewport video reel on mobile */
+@media (max-width: 899px) {
+  body.home .top-bar {
+    display: none;
+  }
+
+  body.home .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 120;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    border-bottom: none;
+  }
+
+  body.home .site-header__logo {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  }
+
+  body.home .site-header__logo:hover {
+    color: #fff;
+  }
+
+  body.home .site-header__menu-icon {
+    background: #fff;
+    box-shadow: 0 7px 0 #fff, 0 -7px 0 #fff;
+  }
+
+  body.home .hero--video {
+    aspect-ratio: auto;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  body.home .hero__video-iframe {
+    width: 177.78vh;
+    height: 100dvh;
+    min-width: 100%;
+    min-height: 100%;
+  }
+}
+
 /* Accordion */
 .accordion {
   border: 1px solid var(--color-border);
