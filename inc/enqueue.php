@@ -7,24 +7,24 @@
 
 function bh_enqueue_scripts() {
 	// Enqueue base styles
-	wp_enqueue_style( 'bh-variables', BH_THEME_URI . '/assets/css/variables.css', array(), BH_THEME_VERSION );
-	wp_enqueue_style( 'bh-layout', BH_THEME_URI . '/assets/css/layout.css', array('bh-variables'), BH_THEME_VERSION );
-	wp_enqueue_style( 'bh-components', BH_THEME_URI . '/assets/css/components.css', array('bh-variables', 'bh-layout'), BH_THEME_VERSION );
-	
+	wp_enqueue_style( 'bh-variables', BH_THEME_URI . '/assets/css/variables.css', array(), bh_asset_version( 'assets/css/variables.css' ) );
+	wp_enqueue_style( 'bh-layout', BH_THEME_URI . '/assets/css/layout.css', array( 'bh-variables' ), bh_asset_version( 'assets/css/layout.css' ) );
+	wp_enqueue_style( 'bh-components', BH_THEME_URI . '/assets/css/components.css', array( 'bh-variables', 'bh-layout' ), bh_asset_version( 'assets/css/components.css' ) );
+
 	// Main theme stylesheet
-	wp_enqueue_style( 'bh-style', get_stylesheet_uri(), array('bh-components'), BH_THEME_VERSION );
+	wp_enqueue_style( 'bh-style', get_stylesheet_uri(), array( 'bh-components' ), bh_asset_version( 'style.css' ) );
 
 	// Base JS
-	wp_enqueue_script( 'bh-main', BH_THEME_URI . '/assets/js/main.js', array(), BH_THEME_VERSION, true );
+	wp_enqueue_script( 'bh-main', BH_THEME_URI . '/assets/js/main.js', array(), bh_asset_version( 'assets/js/main.js' ), true );
 
 	// WooCommerce custom styles/scripts
 	if ( class_exists( 'WooCommerce' ) ) {
-		wp_enqueue_style( 'bh-woocommerce-custom', BH_THEME_URI . '/assets/css/woocommerce-custom.css', array('bh-components'), BH_THEME_VERSION );
-		wp_enqueue_script( 'bh-woocommerce-custom', BH_THEME_URI . '/assets/js/woocommerce-custom.js', array(), BH_THEME_VERSION, true );
+		wp_enqueue_style( 'bh-woocommerce-custom', BH_THEME_URI . '/assets/css/woocommerce-custom.css', array( 'bh-components' ), bh_asset_version( 'assets/css/woocommerce-custom.css' ) );
+		wp_enqueue_script( 'bh-woocommerce-custom', BH_THEME_URI . '/assets/js/woocommerce-custom.js', array(), bh_asset_version( 'assets/js/woocommerce-custom.js' ), true );
 	}
 
 	if ( is_page_template( 'page-book-tickets.php' ) ) {
-		wp_enqueue_script( 'bh-book-tickets', BH_THEME_URI . '/assets/js/book-tickets.js', array(), BH_THEME_VERSION, true );
+		wp_enqueue_script( 'bh-book-tickets', BH_THEME_URI . '/assets/js/book-tickets.js', array(), bh_asset_version( 'assets/js/book-tickets.js' ), true );
 		$tiers_payload = array( '0' => array() );
 		if ( class_exists( 'BHFP_Booking_Public' ) ) {
 			$tiers_payload = BHFP_Booking_Public::ticket_tiers_js_payload();
@@ -45,11 +45,11 @@ function bh_enqueue_scripts() {
 				'tiersByEvent'       => $tiers_payload,
 				'initialEventId'     => $preselect_event_id,
 				'initialVisitDate'   => $preselect_visit_date,
-				'currencySymbol'   => function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$',
-				'decimals'         => function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2,
-				'decimalSeparator' => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
-				'thousandSeparator'=> function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
-				'i18n'             => array(
+				'currencySymbol'     => function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$',
+				'decimals'           => function_exists( 'wc_get_price_decimals' ) ? wc_get_price_decimals() : 2,
+				'decimalSeparator'   => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
+				'thousandSeparator'  => function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
+				'i18n'               => array(
 					'free'       => __( 'Free', 'brimstone-hill' ),
 					'noTiers'    => __( 'Ticket types are not available right now. Please contact us for assistance.', 'brimstone-hill' ),
 					'decrease'   => __( 'Decrease quantity', 'brimstone-hill' ),
@@ -62,7 +62,7 @@ function bh_enqueue_scripts() {
 	}
 
 	if ( is_page_template( 'page-donate.php' ) || is_page( 'donate' ) ) {
-		wp_enqueue_script( 'bh-donate-page', BH_THEME_URI . '/assets/js/donate-page.js', array(), BH_THEME_VERSION, true );
+		wp_enqueue_script( 'bh-donate-page', BH_THEME_URI . '/assets/js/donate-page.js', array(), bh_asset_version( 'assets/js/donate-page.js' ), true );
 		if ( class_exists( 'WooCommerce' ) && function_exists( 'bh_donate_is_ready' ) && bh_donate_is_ready() ) {
 			wp_localize_script(
 				'bh-donate-page',
@@ -78,7 +78,7 @@ function bh_enqueue_scripts() {
 	}
 
 	if ( is_singular( 'bhfp_gallery' ) ) {
-		wp_enqueue_script( 'bh-gallery-lightbox', BH_THEME_URI . '/assets/js/gallery-lightbox.js', array(), BH_THEME_VERSION, true );
+		wp_enqueue_script( 'bh-gallery-lightbox', BH_THEME_URI . '/assets/js/gallery-lightbox.js', array(), bh_asset_version( 'assets/js/gallery-lightbox.js' ), true );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'bh_enqueue_scripts' );

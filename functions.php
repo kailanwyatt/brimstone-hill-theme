@@ -12,6 +12,20 @@ if ( ! defined( 'BH_THEME_VERSION' ) ) {
 define( 'BH_THEME_DIR', get_template_directory() );
 define( 'BH_THEME_URI', get_template_directory_uri() );
 
+/**
+ * Cache-bust version from the asset file's last modified time.
+ *
+ * @param string $relative_path Path relative to the theme root (e.g. assets/css/components.css).
+ * @return string
+ */
+function bh_asset_version( $relative_path ) {
+	$path = BH_THEME_DIR . '/' . ltrim( $relative_path, '/' );
+	if ( is_readable( $path ) ) {
+		return (string) filemtime( $path );
+	}
+	return BH_THEME_VERSION;
+}
+
 // Include theme modules
 require_once BH_THEME_DIR . '/inc/theme-supports.php';
 require_once BH_THEME_DIR . '/inc/enqueue.php';
