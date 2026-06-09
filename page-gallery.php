@@ -44,6 +44,7 @@ while ( have_posts() ) :
 				<?php wp_reset_postdata(); ?>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php

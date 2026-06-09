@@ -18,6 +18,7 @@ while ( have_posts() ) :
 				<?php echo do_shortcode( '[bhfp_events_calendar omit_banner="1"]' ); ?>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php

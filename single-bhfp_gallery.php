@@ -96,6 +96,7 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 

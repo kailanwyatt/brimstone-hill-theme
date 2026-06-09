@@ -109,6 +109,7 @@ while ( have_posts() ) :
 				<?php bh_render_donate_page_markup(); ?>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php

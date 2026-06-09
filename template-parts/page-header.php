@@ -31,4 +31,3 @@ $crumb_class = 'breadcrumb-wrap--align-' . $align;
 	<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
 		<?php get_template_part( 'template-parts/breadcrumb' ); ?>
 	</div>
-</div>

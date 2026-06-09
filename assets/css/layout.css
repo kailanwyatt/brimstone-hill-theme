@@ -101,7 +101,7 @@ body {
   padding: var(--space-section) 0;
 }
 
-.bh-page.content-page--has-banner > .container {
+.bh-page.content-page--has-banner .container {
   padding-top: var(--space-section);
 }
 
@@ -170,7 +170,7 @@ body {
 }
 
 .content-page__body {
-  max-width: 65ch;
+  width: 100%;
 }
 
 .content-page__body p {
@@ -201,6 +201,11 @@ body {
   max-width: none;
 }
 
+.content-page__body--narrow .content-page__main {
+  max-width: 65ch;
+  margin-inline: auto;
+}
+
 .content-page__body--with-sidebar {
   max-width: none;
 }
@@ -224,6 +229,7 @@ body {
 
 .content-page__main--prose {
   max-width: 75ch;
+  margin-inline: auto;
 }
 
 .content-page__sidebar {

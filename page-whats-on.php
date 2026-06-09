@@ -18,6 +18,7 @@ while ( have_posts() ) :
 				<?php echo do_shortcode( '[bhfp_events_list]' ); ?>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php

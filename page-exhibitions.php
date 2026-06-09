@@ -52,6 +52,7 @@ while ( have_posts() ) :
 				</div>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php

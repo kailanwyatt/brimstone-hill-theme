@@ -80,6 +80,7 @@ while ( have_posts() ) :
 				<?php bh_annual_events_static_content(); ?>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php

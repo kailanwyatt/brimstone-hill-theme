@@ -20,6 +20,7 @@ get_header();
 					<?php the_content(); ?>
 				</div>
 			</div>
+		</div>
 		</article>
 		<?php
 	endwhile;

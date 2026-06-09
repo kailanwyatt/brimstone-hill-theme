@@ -125,6 +125,7 @@ while ( have_posts() ) :
 				</section>
 			</div>
 		</div>
+		</div>
 	</article>
 </main>
 	<?php
