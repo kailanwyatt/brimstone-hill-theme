@@ -5,9 +5,31 @@
  * @package Brimstone_Hill
  */
 
+function bh_enqueue_typography_styles() {
+	$settings = bh_get_typography_settings();
+
+	$css = sprintf(
+		':root { --font-heading: %1$s; --font-body: %2$s; }',
+		$settings['heading_stack'],
+		$settings['body_stack']
+	);
+
+	wp_add_inline_style( 'bh-variables', $css );
+}
+
 function bh_enqueue_scripts() {
+	$typography_settings = bh_get_typography_settings();
+	$google_fonts_url    = bh_typography_google_fonts_url( $typography_settings['google_families'] );
+	$variable_deps       = array();
+
+	if ( $google_fonts_url ) {
+		wp_enqueue_style( 'bh-google-fonts', $google_fonts_url, array(), null );
+		$variable_deps[] = 'bh-google-fonts';
+	}
+
 	// Enqueue base styles
-	wp_enqueue_style( 'bh-variables', BH_THEME_URI . '/assets/css/variables.css', array(), bh_asset_version( 'assets/css/variables.css' ) );
+	wp_enqueue_style( 'bh-variables', BH_THEME_URI . '/assets/css/variables.css', $variable_deps, bh_asset_version( 'assets/css/variables.css' ) );
+	bh_enqueue_typography_styles();
 	wp_enqueue_style( 'bh-layout', BH_THEME_URI . '/assets/css/layout.css', array( 'bh-variables' ), bh_asset_version( 'assets/css/layout.css' ) );
 	wp_enqueue_style( 'bh-components', BH_THEME_URI . '/assets/css/components.css', array( 'bh-variables', 'bh-layout' ), bh_asset_version( 'assets/css/components.css' ) );
 

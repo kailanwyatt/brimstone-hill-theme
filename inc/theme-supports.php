@@ -54,5 +54,8 @@ function bh_theme_setup() {
 
 	// Add WooCommerce support
 	add_theme_support( 'woocommerce' );
+
+	add_theme_support( 'align-wide' );
+	add_theme_support( 'responsive-embeds' );
 }
 add_action( 'after_setup_theme', 'bh_theme_setup' );

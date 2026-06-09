@@ -38,6 +38,8 @@ require_once BH_THEME_DIR . '/inc/contact-settings.php';
 require_once BH_THEME_DIR . '/inc/gallery.php';
 require_once BH_THEME_DIR . '/inc/customizer.php';
 require_once BH_THEME_DIR . '/inc/homepage-settings.php';
+require_once BH_THEME_DIR . '/inc/typography-settings.php';
+require_once BH_THEME_DIR . '/inc/elementor.php';
 require_once BH_THEME_DIR . '/inc/merchant-compliance.php';
 
 if ( class_exists( 'WooCommerce' ) ) {

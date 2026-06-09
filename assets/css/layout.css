@@ -65,6 +65,18 @@ body {
   max-width: none;
 }
 
+.content-page--elementor .content-page__column {
+  max-width: none;
+}
+
+.content-page--elementor .content-page__main {
+  width: 100%;
+}
+
+.content-page--elementor .content-page__body--full {
+  padding-inline: 0;
+}
+
 .content-page__head {
   margin-bottom: var(--space-lg);
 }
