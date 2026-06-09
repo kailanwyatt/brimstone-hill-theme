@@ -29,11 +29,16 @@ add_action( 'admin_menu', 'bh_register_contact_settings_page' );
 function bh_register_contact_settings() {
 	$fields = array(
 		'bh_contact_cf7_shortcode',
+		'bh_contact_intro_heading',
+		'bh_contact_intro_lead',
+		'bh_contact_intro_note',
 		'bh_contact_office_title',
+		'bh_contact_office_description',
 		'bh_contact_office_address',
 		'bh_contact_office_phone',
 		'bh_contact_office_email',
 		'bh_contact_fortress_title',
+		'bh_contact_fortress_description',
 		'bh_contact_fortress_address',
 		'bh_contact_fortress_phone',
 		'bh_contact_fortress_email',
@@ -66,14 +71,28 @@ function bh_register_contact_settings() {
 		)
 	);
 
+	add_settings_section(
+		'bh_contact_intro',
+		__( 'Intro', 'brimstone-hill' ),
+		function () {
+			echo '<p class="description">' . esc_html__( 'Shown above the location columns.', 'brimstone-hill' ) . '</p>';
+		},
+		'bh-contact-settings'
+	);
+	add_settings_field( 'bh_contact_intro_heading', __( 'Heading', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_intro', array( 'id' => 'bh_contact_intro_heading', 'default' => 'Get in touch' ) );
+	add_settings_field( 'bh_contact_intro_lead', __( 'Lead paragraph', 'brimstone-hill' ), 'bh_render_contact_textarea_field', 'bh-contact-settings', 'bh_contact_intro', array( 'id' => 'bh_contact_intro_lead', 'default' => 'The head office handles membership, group bookings, and general enquiries. The fortress visitor centre is open daily for on-site questions and admissions.' ) );
+	add_settings_field( 'bh_contact_intro_note', __( 'Note', 'brimstone-hill' ), 'bh_render_contact_textarea_field', 'bh-contact-settings', 'bh_contact_intro', array( 'id' => 'bh_contact_intro_note', 'default' => 'We aim to reply to all enquiries as soon as possible during business hours.' ) );
+
 	add_settings_section( 'bh_contact_office', __( 'Head Office — Taylor\'s Range', 'brimstone-hill' ), '__return_false', 'bh-contact-settings' );
 	add_settings_field( 'bh_contact_office_title', __( 'Location title', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_office', array( 'id' => 'bh_contact_office_title', 'default' => "Head Office — Taylor's Range" ) );
+	add_settings_field( 'bh_contact_office_description', __( 'Short description', 'brimstone-hill' ), 'bh_render_contact_textarea_field', 'bh-contact-settings', 'bh_contact_office', array( 'id' => 'bh_contact_office_description', 'default' => 'For membership, donations, group visits, school bookings, and general enquiries.' ) );
 	add_settings_field( 'bh_contact_office_address', __( 'Address', 'brimstone-hill' ), 'bh_render_contact_textarea_field', 'bh-contact-settings', 'bh_contact_office', array( 'id' => 'bh_contact_office_address', 'default' => "P.O. Box 588 Taylor's Range\nBasseterre\nSt. Kitts, West Indies" ) );
 	add_settings_field( 'bh_contact_office_phone', __( 'Phone', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_office', array( 'id' => 'bh_contact_office_phone', 'default' => '869-465-2609' ) );
 	add_settings_field( 'bh_contact_office_email', __( 'Email', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_office', array( 'id' => 'bh_contact_office_email', 'default' => 'info@brimstonehillfortress.org' ) );
 
 	add_settings_section( 'bh_contact_fortress', __( 'Fortress — New Guinea', 'brimstone-hill' ), '__return_false', 'bh-contact-settings' );
 	add_settings_field( 'bh_contact_fortress_title', __( 'Location title', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_fortress', array( 'id' => 'bh_contact_fortress_title', 'default' => 'Fortress — New Guinea' ) );
+	add_settings_field( 'bh_contact_fortress_description', __( 'Short description', 'brimstone-hill' ), 'bh_render_contact_textarea_field', 'bh-contact-settings', 'bh_contact_fortress', array( 'id' => 'bh_contact_fortress_description', 'default' => 'On-site visitor centre, admissions, and directions for your visit to the fortress.' ) );
 	add_settings_field( 'bh_contact_fortress_address', __( 'Address', 'brimstone-hill' ), 'bh_render_contact_textarea_field', 'bh-contact-settings', 'bh_contact_fortress', array( 'id' => 'bh_contact_fortress_address', 'default' => "Brimstone Hill Fortress National Park\nSt. Kitts, West Indies" ) );
 	add_settings_field( 'bh_contact_fortress_phone', __( 'Phone', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_fortress', array( 'id' => 'bh_contact_fortress_phone', 'default' => '869-465-6771' ) );
 	add_settings_field( 'bh_contact_fortress_email', __( 'Email', 'brimstone-hill' ), 'bh_render_contact_text_field', 'bh-contact-settings', 'bh_contact_fortress', array( 'id' => 'bh_contact_fortress_email', 'default' => 'info@brimstonehillfortress.org' ) );
