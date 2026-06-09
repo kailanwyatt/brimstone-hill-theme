@@ -49,6 +49,9 @@ if ( class_exists( 'BHFP_Booking_Public' ) ) {
 					<?php if ( $page_lede ) : ?>
 						<p class="page-banner__lede"><?php echo esc_html( $page_lede ); ?></p>
 					<?php endif; ?>
+					<div class="breadcrumb-wrap page-banner__breadcrumb breadcrumb-wrap--align-<?php echo esc_attr( bh_get_page_title_align() ); ?>">
+						<?php get_template_part( 'template-parts/breadcrumb' ); ?>
+					</div>
 				</div>
 			</div>
 		<?php else : ?>
@@ -63,9 +66,11 @@ if ( class_exists( 'BHFP_Booking_Public' ) ) {
 		<?php endif; ?>
 
 		<div class="container page-book-tickets__body">
+		<?php if ( ! $has_banner ) : ?>
 		<div class="breadcrumb-wrap breadcrumb-wrap--align-<?php echo esc_attr( bh_get_page_title_align() ); ?>">
 			<?php get_template_part( 'template-parts/breadcrumb' ); ?>
 		</div>
+		<?php endif; ?>
 		<?php if ( ! $booking_ready ) : ?>
 			<p class="book-tickets-notice notice"><?php esc_html_e( 'Online ticket booking is unavailable right now. Please contact the fortress office for assistance, or use the booking link below if one is shown.', 'brimstone-hill' ); ?></p>
 		<?php endif; ?>

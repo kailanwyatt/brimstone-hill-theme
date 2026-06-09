@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $has_banner  = has_post_thumbnail();
+$is_contact  = is_page_template( 'page-contact.php' );
 $align       = bh_get_page_title_align();
 $align_class = 'page-title--align-' . $align;
 $crumb_class = 'breadcrumb-wrap--align-' . $align;
@@ -19,18 +20,31 @@ $crumb_class = 'breadcrumb-wrap--align-' . $align;
 		<div class="page-banner__overlay" aria-hidden="true"></div>
 		<div class="container page-banner__inner">
 			<h1 class="page-banner__title page-banner__title--align-<?php echo esc_attr( $align ); ?>"><?php the_title(); ?></h1>
+			<div class="breadcrumb-wrap page-banner__breadcrumb <?php echo esc_attr( $crumb_class ); ?>">
+				<?php get_template_part( 'template-parts/breadcrumb' ); ?>
+			</div>
 		</div>
 	</div>
 <?php endif; ?>
 
+<?php if ( $is_contact && ! $has_banner ) : ?>
 <div class="container">
 	<div class="content-page__column">
 		<header class="content-page__head">
-			<?php if ( ! $has_banner ) : ?>
-				<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
-			<?php endif; ?>
-
+			<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
 			<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
 				<?php get_template_part( 'template-parts/breadcrumb' ); ?>
 			</div>
 		</header>
+<?php elseif ( ! $is_contact ) : ?>
+<div class="container">
+	<div class="content-page__column">
+		<?php if ( ! $has_banner ) : ?>
+			<header class="content-page__head">
+				<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
+				<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
+					<?php get_template_part( 'template-parts/breadcrumb' ); ?>
+				</div>
+			</header>
+		<?php endif; ?>
+<?php endif; ?>

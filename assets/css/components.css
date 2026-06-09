@@ -9,6 +9,13 @@
   border: 2px solid transparent;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.btn br,
+.wp-block-button__link br,
+.wp-element-button br {
+  display: none;
 }
 
 .btn--primary,
@@ -1587,6 +1594,7 @@ body.home .welcome-section {
   .welcome-section__actions .btn {
     width: 100%;
     justify-content: center;
+    white-space: normal;
   }
 }
 
@@ -3167,9 +3175,6 @@ a.tag-chip {
   padding-bottom: 0;
 }
 
-.contact-page.content-page--has-banner .content-page__head {
-  margin-bottom: 0;
-}
 
 .contact-panel {
   padding: var(--space-section) 0;

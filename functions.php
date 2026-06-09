@@ -48,3 +48,27 @@ if ( class_exists( 'WooCommerce' ) ) {
 add_action( 'init', function() {
 	remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
 });
+
+/**
+ * Remove stray line breaks inside button/link markup from page content.
+ *
+ * @param string $content Post content.
+ * @return string
+ */
+function bh_fix_button_line_breaks_in_content( $content ) {
+	if ( ! is_string( $content ) || '' === $content || is_admin() ) {
+		return $content;
+	}
+
+	return (string) preg_replace_callback(
+		'/<(a|button)\b([^>]*)>(.*?)<\/\1>/is',
+		static function ( $matches ) {
+			$inner = preg_replace( '/<br\s*\/?>/i', ' ', $matches[3] );
+			$inner = preg_replace( '/\s+/', ' ', $inner );
+
+			return '<' . $matches[1] . $matches[2] . '>' . trim( $inner ) . '</' . $matches[1] . '>';
+		},
+		$content
+	);
+}
+add_filter( 'the_content', 'bh_fix_button_line_breaks_in_content', 20 );

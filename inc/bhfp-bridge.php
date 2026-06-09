@@ -67,11 +67,24 @@ function bh_book_tickets_url() {
 }
 
 /**
+ * Normalize button/link labels — strip tags and collapse whitespace.
+ *
+ * @param string $label Raw label.
+ * @return string
+ */
+function bh_normalize_button_label( $label ) {
+	$label = wp_strip_all_tags( (string) $label );
+	$label = preg_replace( '/\s+/', ' ', $label );
+
+	return trim( $label );
+}
+
+/**
  * @return string
  */
 function bh_book_tickets_label() {
 	if ( function_exists( 'bhfp_book_tickets_label' ) ) {
-		return bhfp_book_tickets_label();
+		return bh_normalize_button_label( bhfp_book_tickets_label() );
 	}
 	return __( 'Book tickets', 'brimstone-hill' );
 }
