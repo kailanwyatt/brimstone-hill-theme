@@ -22,7 +22,7 @@ while ( have_posts() ) :
 		)
 	);
 	?>
-<main id="main-content" class="bh-page content-page gallery-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
+<main id="main-content" class="bh-page content-page content-page--wide gallery-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
 

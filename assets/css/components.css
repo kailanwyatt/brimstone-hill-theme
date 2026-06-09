@@ -3167,6 +3167,10 @@ a.tag-chip {
   padding-bottom: 0;
 }
 
+.contact-page.content-page--has-banner .content-page__head {
+  margin-bottom: 0;
+}
+
 .contact-panel {
   padding: var(--space-section) 0;
 }

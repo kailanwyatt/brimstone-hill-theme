@@ -21,6 +21,7 @@ get_header();
 				</div>
 			</div>
 		</div>
+		</div>
 		</article>
 		<?php
 	endwhile;

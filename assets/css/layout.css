@@ -55,20 +55,34 @@ body {
   padding-right: var(--space-md);
 }
 
+.content-page__column {
+  width: 100%;
+  max-width: 75ch;
+  margin-inline: auto;
+}
+
+.content-page--wide .content-page__column {
+  max-width: none;
+}
+
+.content-page__head {
+  margin-bottom: var(--space-lg);
+}
+
 .breadcrumb-wrap {
-  padding-top: var(--space-md);
-  padding-bottom: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .breadcrumb__list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem var(--space-xs);
+  gap: 0.2rem var(--space-xs);
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--color-text-muted);
 }
 
@@ -79,22 +93,23 @@ body {
 }
 
 .breadcrumb__sep {
-  color: var(--color-border);
+  color: var(--color-text-muted);
+  opacity: 0.45;
   user-select: none;
 }
 
 .breadcrumb__link {
-  color: var(--color-primary);
+  color: var(--color-text-muted);
   text-decoration: none;
 }
 
 .breadcrumb__link:hover {
-  color: var(--color-primary-hover);
+  color: var(--color-primary);
 }
 
 .breadcrumb__current {
   color: var(--color-text);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .bh-page {
@@ -102,7 +117,7 @@ body {
 }
 
 .bh-page.content-page--has-banner .container {
-  padding-top: var(--space-section);
+  padding-top: var(--space-md);
 }
 
 /* Page banner (full-width image with title) */
@@ -148,7 +163,7 @@ body {
   font-family: var(--font-heading);
   font-size: 1.75rem;
   margin-top: 0;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-xs);
 }
 
 .page-title--align-center,
@@ -228,8 +243,29 @@ body {
 }
 
 .content-page__main--prose {
-  max-width: 75ch;
-  margin-inline: auto;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.content-page__main--prose .wp-block-buttons,
+.content-page__main--prose p:has(.btn) {
+  margin-top: var(--space-lg);
+}
+
+.content-page__main--prose .wp-block-button,
+.content-page__main--prose .wp-block-buttons {
+  width: auto;
+}
+
+.content-page__main--prose .wp-block-button__link,
+.content-page__main--prose .btn {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+}
+
+.content-page__main--prose .btn--block {
+  width: auto;
 }
 
 .content-page__sidebar {

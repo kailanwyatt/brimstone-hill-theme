@@ -30,9 +30,10 @@ while ( have_posts() ) :
 	$directions_url       = ( 0 === strpos( $directions_path, 'http' ) ) ? $directions_path : home_url( $directions_path );
 	$cf7_shortcode        = bh_get_contact_setting( 'bh_contact_cf7_shortcode', '' );
 	?>
-<main id="main-content" class="bh-page content-page contact-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
+<main id="main-content" class="bh-page content-page content-page--wide contact-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
+		</div>
 		</div>
 
 		<section class="contact-panel contact-panel--locations" aria-label="<?php esc_attr_e( 'Contact locations', 'brimstone-hill' ); ?>">

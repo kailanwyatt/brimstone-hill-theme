@@ -60,7 +60,7 @@ while ( have_posts() ) :
 	the_post();
 	$image_rows = bh_gallery_single_image_rows( get_the_ID() );
 	?>
-<main id="main-content" class="bh-page content-page gallery-album-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
+<main id="main-content" class="bh-page content-page content-page--wide gallery-album-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
 		<div class="content-page__body content-page__body--full">

@@ -108,7 +108,7 @@ $bh_recent_query = new WP_Query(
 
 ?>
 
-<main id="main-content" class="bh-page content-page news-page">
+<main id="main-content" class="bh-page content-page content-page--wide news-page">
 	<?php
 	while ( have_posts() ) :
 		the_post();
@@ -215,6 +215,7 @@ $bh_recent_query = new WP_Query(
 					</div>
 				</div>
 			</div>
+		</div>
 		</article>
 		<?php
 	endwhile;

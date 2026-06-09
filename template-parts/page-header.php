@@ -24,10 +24,13 @@ $crumb_class = 'breadcrumb-wrap--align-' . $align;
 <?php endif; ?>
 
 <div class="container">
-	<?php if ( ! $has_banner ) : ?>
-		<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
-	<?php endif; ?>
+	<div class="content-page__column">
+		<header class="content-page__head">
+			<?php if ( ! $has_banner ) : ?>
+				<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
+			<?php endif; ?>
 
-	<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
-		<?php get_template_part( 'template-parts/breadcrumb' ); ?>
-	</div>
+			<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
+				<?php get_template_part( 'template-parts/breadcrumb' ); ?>
+			</div>
+		</header>

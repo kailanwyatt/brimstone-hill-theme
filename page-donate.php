@@ -101,7 +101,7 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 	?>
-<main id="main-content" class="bh-page content-page donate-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
+<main id="main-content" class="bh-page content-page content-page--wide donate-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
 		<div class="content-page__body content-page__body--full">
