@@ -1427,6 +1427,10 @@ body.home {
 }
 
 /* Welcome section — below hero video */
+body.home .welcome-section {
+  padding-top: clamp(1.25rem, 4vw, var(--space-section));
+}
+
 .welcome-section {
   padding: var(--space-section) 0;
   background: linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
@@ -3097,54 +3101,201 @@ a.tag-chip {
   display: block;
   text-decoration: none;
   color: inherit;
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  transition: transform 0.2s;
 }
 
 .gallery-album-card:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .gallery-album-card__image-wrap {
+  position: relative;
   display: block;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: 8px;
 }
 
 .gallery-album-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.2s;
+  transition: transform 0.35s ease;
 }
 
 .gallery-album-card:hover .gallery-album-card__image {
-  transform: scale(1.03);
+  transform: scale(1.05);
+}
+
+.gallery-album-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.gallery-album-card:hover .gallery-album-card__overlay,
+.gallery-album-card:focus-visible .gallery-album-card__overlay {
+  opacity: 1;
+}
+
+.gallery-album-card__count {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .gallery-album-card__title {
   font-family: var(--font-heading);
   font-size: 1.125rem;
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Contact page */
+.contact-page__layout {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 900px) {
+  .contact-page__layout {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+}
+
+.contact-locations {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.contact-location-card {
+  padding: var(--space-lg);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.contact-location-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin: 0 0 var(--space-md);
+  color: var(--color-primary);
+}
+
+.contact-location-card__list {
+  list-style: none;
   margin: 0;
-  padding: var(--space-md) var(--space-lg) 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-md);
 }
 
-.gallery-album-card__desc {
-  margin: var(--space-sm) 0 0;
-  padding: 0 var(--space-lg);
+.contact-location-card__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
   font-size: 0.9375rem;
-  color: var(--color-text-muted);
+  line-height: 1.5;
 }
 
-.gallery-album-card__meta {
-  display: block;
-  padding: var(--space-md) var(--space-lg) var(--space-lg);
-  font-size: 0.8125rem;
+.contact-location-card__item a {
+  color: var(--color-secondary);
+  text-decoration: none;
+}
+
+.contact-location-card__item a:hover {
+  text-decoration: underline;
+}
+
+.contact-location-card__icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+  margin-top: 0.125rem;
+}
+
+.contact-page__form-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin: 0 0 var(--space-lg);
+}
+
+.contact-page__form-note {
   color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.contact-form .wpcf7-form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.contact-form .wpcf7-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.contact-form .wpcf7-form input[type="text"],
+.contact-form .wpcf7-form input[type="email"],
+.contact-form .wpcf7-form input[type="tel"],
+.contact-form .wpcf7-form textarea,
+.contact-form .wpcf7-form select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font: inherit;
+}
+
+.contact-form .wpcf7-form textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.contact-form .wpcf7-submit {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.contact-form .wpcf7-submit:hover {
+  opacity: 0.9;
+}
+
+/* News inline filters */
+.news-filters {
+  margin-bottom: var(--space-xl);
+}
+
+.sidebar-list--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list--inline li {
+  margin: 0;
 }
 
 .gallery-album-page__back {

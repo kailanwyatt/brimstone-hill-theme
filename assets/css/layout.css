@@ -151,6 +151,24 @@ body {
   margin-bottom: var(--space-lg);
 }
 
+.page-title--align-center,
+.page-banner__title--align-center {
+  text-align: center;
+}
+
+.page-title--align-right,
+.page-banner__title--align-right {
+  text-align: right;
+}
+
+.breadcrumb-wrap--align-center .breadcrumb__list {
+  justify-content: center;
+}
+
+.breadcrumb-wrap--align-right .breadcrumb__list {
+  justify-content: flex-end;
+}
+
 .content-page__body {
   max-width: 65ch;
 }

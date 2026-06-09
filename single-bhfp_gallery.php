@@ -13,12 +13,12 @@ if ( ! function_exists( 'bh_gallery_single_image_rows' ) ) {
 	 * @return array<int, array{id:int,full:string,thumb:string,alt:string,caption:string}>
 	 */
 	function bh_gallery_single_image_rows( $album_id ) {
-		$album_id  = (int) $album_id;
+		$album_id          = (int) $album_id;
 		$meta_ids_key      = defined( 'BHFP_GALLERY_META_IDS' ) ? BHFP_GALLERY_META_IDS : '_bhfp_attachment_ids';
 		$meta_captions_key = defined( 'BHFP_GALLERY_META_CAPTIONS' ) ? BHFP_GALLERY_META_CAPTIONS : '_bhfp_captions';
-		$raw_ids   = get_post_meta( $album_id, $meta_ids_key, true );
-		$captions  = get_post_meta( $album_id, $meta_captions_key, true );
-		$captions  = is_array( $captions ) ? $captions : array();
+		$raw_ids           = get_post_meta( $album_id, $meta_ids_key, true );
+		$captions          = get_post_meta( $album_id, $meta_captions_key, true );
+		$captions          = is_array( $captions ) ? $captions : array();
 		if ( is_array( $raw_ids ) ) {
 			$ids = $raw_ids;
 		} else {
@@ -33,8 +33,8 @@ if ( ! function_exists( 'bh_gallery_single_image_rows' ) ) {
 			if ( ! $full || ! $thm ) {
 				continue;
 			}
-			$alt         = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
-			$db_caption  = wp_get_attachment_caption( $id );
+			$alt          = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
+			$db_caption   = wp_get_attachment_caption( $id );
 			$meta_caption = '';
 			if ( isset( $captions[ $id ] ) ) {
 				$meta_caption = (string) $captions[ $id ];
@@ -58,97 +58,41 @@ get_header();
 
 while ( have_posts() ) :
 	the_post();
-	$album_id         = get_the_ID();
-	$image_rows       = bh_gallery_single_image_rows( $album_id );
-	$bh_enable_sidebar = get_post_meta( $album_id, '_bh_sidebar_enabled', true );
-	$bh_has_banner     = has_post_thumbnail();
+	$image_rows = bh_gallery_single_image_rows( get_the_ID() );
 	?>
-<main id="main-content" class="bh-page content-page gallery-album-page">
+<main id="main-content" class="bh-page content-page gallery-album-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-		<?php if ( $bh_has_banner ) : ?>
-			<div class="page-banner" style="background-image: url('<?php echo esc_url( get_the_post_thumbnail_url( null, 'full' ) ); ?>');" role="img" aria-label="">
-				<div class="page-banner__overlay" aria-hidden="true"></div>
-				<div class="container page-banner__inner">
-					<h1 class="page-banner__title"><?php the_title(); ?></h1>
-				</div>
-			</div>
-		<?php endif; ?>
+		<?php get_template_part( 'template-parts/page', 'header' ); ?>
+		<div class="content-page__body content-page__body--full">
+			<div class="content-page__main">
+				<p class="gallery-album-page__back">
+					<a class="link--back" href="<?php echo esc_url( home_url( '/discover/gallery/' ) ); ?>"><?php esc_html_e( 'Back to gallery', 'brimstone-hill' ); ?></a>
+				</p>
+				<?php if ( has_excerpt() ) : ?>
+					<p class="gallery-album-page__desc"><?php echo esc_html( get_the_excerpt() ); ?></p>
+				<?php endif; ?>
 
-		<div class="container">
-			<?php if ( ! $bh_has_banner ) : ?>
-				<h1 class="page-title"><?php the_title(); ?></h1>
-			<?php endif; ?>
-
-			<div class="content-page__body <?php echo $bh_enable_sidebar ? 'content-page__body--with-sidebar' : 'content-page__body--full'; ?>">
-				<?php if ( $bh_enable_sidebar ) : ?>
-					<div class="content-page__layout">
-						<div class="content-page__main">
-							<p class="gallery-album-page__back">
-								<a class="link--back" href="<?php echo esc_url( home_url( '/discover/gallery/' ) ); ?>"><?php esc_html_e( 'Back to gallery', 'brimstone-hill' ); ?></a>
-							</p>
-							<?php if ( has_excerpt() ) : ?>
-								<p class="gallery-album-page__desc"><?php echo esc_html( get_the_excerpt() ); ?></p>
-							<?php endif; ?>
-
-							<?php if ( ! empty( $image_rows ) ) : ?>
-								<div class="gallery-grid">
-									<?php foreach ( $image_rows as $row ) : ?>
-									<figure class="gallery-grid__item">
-										<button
-											type="button"
-											class="gallery-grid__thumb-wrap"
-											data-gallery-open="1"
-											data-full="<?php echo esc_url( $row['full'] ); ?>"
-											data-alt="<?php echo esc_attr( $row['alt'] ); ?>"
-											data-caption="<?php echo esc_attr( $row['caption'] ); ?>"
-											aria-label="<?php echo esc_attr( sprintf( __( 'View image: %s', 'brimstone-hill' ), $row['caption'] ) ); ?>"
-										>
-											<img class="gallery-grid__thumb" src="<?php echo esc_url( $row['thumb'] ); ?>" alt="<?php echo esc_attr( $row['alt'] ); ?>" loading="lazy" />
-										</button>
-										<figcaption class="gallery-grid__caption"><?php echo esc_html( $row['caption'] ); ?></figcaption>
-									</figure>
-									<?php endforeach; ?>
-								</div>
-							<?php else : ?>
-								<p><?php esc_html_e( 'No images found in this album yet.', 'brimstone-hill' ); ?></p>
-							<?php endif; ?>
-						</div>
-						<aside class="content-page__sidebar" aria-label="<?php esc_attr_e( 'Sidebar', 'brimstone-hill' ); ?>">
-							<?php get_template_part( 'template-parts/sidebar-menu' ); ?>
-						</aside>
+				<?php if ( ! empty( $image_rows ) ) : ?>
+					<div class="gallery-grid">
+						<?php foreach ( $image_rows as $row ) : ?>
+						<figure class="gallery-grid__item">
+							<button
+								type="button"
+								class="gallery-grid__thumb-wrap"
+								data-gallery-open="1"
+								data-full="<?php echo esc_url( $row['full'] ); ?>"
+								data-alt="<?php echo esc_attr( $row['alt'] ); ?>"
+								data-caption="<?php echo esc_attr( $row['caption'] ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( __( 'View image: %s', 'brimstone-hill' ), $row['caption'] ) ); ?>"
+							>
+								<img class="gallery-grid__thumb" src="<?php echo esc_url( $row['thumb'] ); ?>" alt="<?php echo esc_attr( $row['alt'] ); ?>" loading="lazy" />
+							</button>
+							<figcaption class="gallery-grid__caption"><?php echo esc_html( $row['caption'] ); ?></figcaption>
+						</figure>
+						<?php endforeach; ?>
 					</div>
 				<?php else : ?>
-					<div class="content-page__main">
-						<p class="gallery-album-page__back">
-							<a class="link--back" href="<?php echo esc_url( home_url( '/discover/gallery/' ) ); ?>"><?php esc_html_e( 'Back to gallery', 'brimstone-hill' ); ?></a>
-						</p>
-						<?php if ( has_excerpt() ) : ?>
-							<p class="gallery-album-page__desc"><?php echo esc_html( get_the_excerpt() ); ?></p>
-						<?php endif; ?>
-
-						<?php if ( ! empty( $image_rows ) ) : ?>
-							<div class="gallery-grid">
-								<?php foreach ( $image_rows as $row ) : ?>
-								<figure class="gallery-grid__item">
-									<button
-										type="button"
-										class="gallery-grid__thumb-wrap"
-										data-gallery-open="1"
-										data-full="<?php echo esc_url( $row['full'] ); ?>"
-										data-alt="<?php echo esc_attr( $row['alt'] ); ?>"
-										data-caption="<?php echo esc_attr( $row['caption'] ); ?>"
-										aria-label="<?php echo esc_attr( sprintf( __( 'View image: %s', 'brimstone-hill' ), $row['caption'] ) ); ?>"
-									>
-										<img class="gallery-grid__thumb" src="<?php echo esc_url( $row['thumb'] ); ?>" alt="<?php echo esc_attr( $row['alt'] ); ?>" loading="lazy" />
-									</button>
-									<figcaption class="gallery-grid__caption"><?php echo esc_html( $row['caption'] ); ?></figcaption>
-								</figure>
-								<?php endforeach; ?>
-							</div>
-						<?php else : ?>
-							<p><?php esc_html_e( 'No images found in this album yet.', 'brimstone-hill' ); ?></p>
-						<?php endif; ?>
-					</div>
+					<p><?php esc_html_e( 'No images found in this album yet.', 'brimstone-hill' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
