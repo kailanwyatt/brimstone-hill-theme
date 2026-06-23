@@ -33,10 +33,7 @@ while ( have_posts() ) :
 <main id="main-content" class="bh-page content-page content-page--wide contact-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
-		<?php if ( ! has_post_thumbnail() ) : ?>
-		</div>
-		</div>
-		<?php endif; ?>
+		<?php bh_render_page_content_shell_close(); ?>
 
 		<section class="contact-panel contact-panel--locations" aria-label="<?php esc_attr_e( 'Contact locations', 'brimstone-hill' ); ?>">
 			<div class="container">

@@ -13,6 +13,7 @@ while ( have_posts() ) :
 <main id="main-content" class="bh-page content-page bh-order-complete">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
+		<?php bh_render_page_content_shell_open(); ?>
 		<div class="content-page__body content-page__body--narrow">
 			<div class="content-page__main content-page__main--prose">
 				<?php the_content(); ?>
@@ -23,7 +24,7 @@ while ( have_posts() ) :
 				?>
 			</div>
 		</div>
-		</div>
+		<?php bh_render_page_content_shell_close(); ?>
 	</article>
 </main>
 	<?php

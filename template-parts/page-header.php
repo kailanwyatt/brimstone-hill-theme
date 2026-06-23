@@ -36,15 +36,13 @@ $crumb_class = 'breadcrumb-wrap--align-' . $align;
 				<?php get_template_part( 'template-parts/breadcrumb' ); ?>
 			</div>
 		</header>
-<?php elseif ( ! $is_contact ) : ?>
+<?php elseif ( ! $is_contact && ! $has_banner ) : ?>
 <div class="container">
 	<div class="content-page__column">
-		<?php if ( ! $has_banner ) : ?>
-			<header class="content-page__head">
-				<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
-				<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
-					<?php get_template_part( 'template-parts/breadcrumb' ); ?>
-				</div>
-			</header>
-		<?php endif; ?>
+		<header class="content-page__head">
+			<h1 class="page-title <?php echo esc_attr( $align_class ); ?>"><?php the_title(); ?></h1>
+			<div class="breadcrumb-wrap <?php echo esc_attr( $crumb_class ); ?>">
+				<?php get_template_part( 'template-parts/breadcrumb' ); ?>
+			</div>
+		</header>
 <?php endif; ?>

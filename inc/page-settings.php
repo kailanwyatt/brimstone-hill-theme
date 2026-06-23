@@ -91,3 +91,30 @@ function bh_save_page_settings_metabox( $post_id ) {
 	update_post_meta( $post_id, '_bh_page_title_align', $align );
 }
 add_action( 'save_post_page', 'bh_save_page_settings_metabox' );
+
+/**
+ * Open the content shell after a page banner (container + column).
+ *
+ * page-header.php opens this wrapper automatically when there is no banner.
+ */
+function bh_render_page_content_shell_open() {
+	if ( is_page_template( 'page-contact.php' ) || ! has_post_thumbnail() ) {
+		return;
+	}
+
+	echo '<div class="container"><div class="content-page__column">';
+}
+
+/**
+ * Close the page content shell opened by page-header or bh_render_page_content_shell_open().
+ */
+function bh_render_page_content_shell_close() {
+	if ( is_page_template( 'page-contact.php' ) ) {
+		if ( ! has_post_thumbnail() ) {
+			echo '</div></div>';
+		}
+		return;
+	}
+
+	echo '</div></div>';
+}

@@ -3089,43 +3089,57 @@ a.tag-chip {
 
 .gallery-albums {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: var(--space-xl);
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-md);
 }
 
-@media (min-width: 480px) {
+@media (min-width: 540px) {
   .gallery-albums {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 720px) {
+@media (min-width: 768px) {
   .gallery-albums {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery-albums {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .gallery-albums--columns-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-albums--columns-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 .gallery-album-card {
   display: block;
   text-decoration: none;
-  color: inherit;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-  transition: transform 0.2s;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
-.gallery-album-card:hover {
+.gallery-album-card:hover,
+.gallery-album-card:focus-visible {
   transform: translateY(-2px);
 }
 
-.gallery-album-card__image-wrap {
+.gallery-album-card__media {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 10px;
+  background: var(--color-bg-alt);
 }
 
 .gallery-album-card__image {
@@ -3135,44 +3149,71 @@ a.tag-chip {
   transition: transform 0.35s ease;
 }
 
-.gallery-album-card:hover .gallery-album-card__image {
-  transform: scale(1.05);
+.gallery-album-card:hover .gallery-album-card__image,
+.gallery-album-card:focus-visible .gallery-album-card__image {
+  transform: scale(1.04);
 }
 
 .gallery-album-card__overlay {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  background: rgba(0, 0, 0, 0.42);
+  pointer-events: none;
+  transition: background 0.25s ease;
 }
 
 .gallery-album-card:hover .gallery-album-card__overlay,
 .gallery-album-card:focus-visible .gallery-album-card__overlay {
-  opacity: 1;
+  background: rgba(0, 0, 0, 0.52);
 }
 
-.gallery-album-card__count {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+.gallery-album-card__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-md) calc(var(--space-lg) + 1.25rem);
+  text-align: center;
+  pointer-events: none;
 }
 
 .gallery-album-card__title {
   font-family: var(--font-heading);
-  font-size: 1.125rem;
-  margin: var(--space-md) 0 0;
+  font-size: clamp(0.8125rem, 1.35vw, 1rem);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
   padding: 0;
-  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.gallery-album-card__count {
+  position: absolute;
+  left: var(--space-md);
+  bottom: var(--space-md);
+  z-index: 2;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
 }
 
 /* Contact page — Caribbee-inspired stacked layout */
 .contact-page.bh-page {
   padding-bottom: 0;
+}
+
+.contact-page.content-page--has-banner .contact-panel--locations {
+  padding-top: var(--space-lg);
 }
 
 

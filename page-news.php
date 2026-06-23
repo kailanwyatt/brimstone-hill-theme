@@ -108,7 +108,7 @@ $bh_recent_query = new WP_Query(
 
 ?>
 
-<main id="main-content" class="bh-page content-page content-page--wide news-page">
+<main id="main-content" class="bh-page content-page content-page--wide news-page<?php echo has_post_thumbnail() ? ' content-page--has-banner' : ''; ?>">
 	<?php
 	while ( have_posts() ) :
 		the_post();
@@ -116,6 +116,7 @@ $bh_recent_query = new WP_Query(
 		?>
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<?php get_template_part( 'template-parts/page', 'header' ); ?>
+			<?php bh_render_page_content_shell_open(); ?>
 				<div class="content-page__body content-page__body--full">
 					<p class="news-page__intro">
 						<?php esc_html_e( 'Latest news, updates, and stories from the fortress.', 'brimstone-hill' ); ?>
@@ -214,8 +215,7 @@ $bh_recent_query = new WP_Query(
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			<?php bh_render_page_content_shell_close(); ?>
 		</article>
 		<?php
 	endwhile;

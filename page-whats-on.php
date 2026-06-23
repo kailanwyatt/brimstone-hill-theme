@@ -13,12 +13,13 @@ while ( have_posts() ) :
 <main id="main-content" class="bh-page content-page content-page--wide whats-on-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
+		<?php bh_render_page_content_shell_open(); ?>
 		<div class="content-page__body content-page__body--full">
 			<div class="content-page__main">
 				<?php echo do_shortcode( '[bhfp_events_list]' ); ?>
 			</div>
 		</div>
-		</div>
+		<?php bh_render_page_content_shell_close(); ?>
 	</article>
 </main>
 	<?php

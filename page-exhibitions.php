@@ -36,6 +36,7 @@ while ( have_posts() ) :
 <main id="main-content" class="bh-page content-page content-page--wide exhibitions-page <?php echo has_post_thumbnail() ? 'content-page--has-banner' : ''; ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php get_template_part( 'template-parts/page', 'header' ); ?>
+		<?php bh_render_page_content_shell_open(); ?>
 		<div class="content-page__body content-page__body--full">
 			<div class="content-page__main">
 				<p class="listing-page__intro"><?php esc_html_e( 'Current and past exhibitions. Discover the stories behind the fortress through our displays.', 'brimstone-hill' ); ?></p>
@@ -52,7 +53,7 @@ while ( have_posts() ) :
 				</div>
 			</div>
 		</div>
-		</div>
+		<?php bh_render_page_content_shell_close(); ?>
 	</article>
 </main>
 	<?php

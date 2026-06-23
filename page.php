@@ -28,13 +28,13 @@ get_header();
 		?>
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<?php get_template_part( 'template-parts/page', 'header' ); ?>
+			<?php bh_render_page_content_shell_open(); ?>
 			<div class="content-page__body content-page__body--full">
 				<div class="content-page__main content-page__main--prose">
 					<?php the_content(); ?>
 				</div>
 			</div>
-		</div>
-		</div>
+			<?php bh_render_page_content_shell_close(); ?>
 		</article>
 		<?php
 	endwhile;

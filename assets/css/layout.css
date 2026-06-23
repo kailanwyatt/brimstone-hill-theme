@@ -128,8 +128,12 @@ body {
   padding: var(--space-section) 0;
 }
 
-.bh-page.content-page--has-banner .container {
-  padding-top: var(--space-md);
+.bh-page.content-page--has-banner {
+  padding-top: 0;
+}
+
+.bh-page.content-page--has-banner > article > .container {
+  padding-top: 0;
 }
 
 /* Page banner (full-width image with title) */
