@@ -174,43 +174,10 @@ function bh_sanitize_typography_font( $value, $group = 'heading' ) {
  * @return array{heading_slug: string, body_slug: string, heading_stack: string, body_stack: string, google_families: array<int, array{family: string, weights: int[]}>}
  */
 function bh_get_typography_settings() {
-	$choices = bh_typography_font_choices();
-
-	$heading_slug = bh_sanitize_typography_font( (string) get_option( 'bh_typography_heading_font', 'theme-default' ), 'heading' );
-	$body_slug    = bh_sanitize_typography_font( (string) get_option( 'bh_typography_body_font', 'system-ui' ), 'body' );
-
-	$heading = $choices['heading'][ $heading_slug ];
-	$body    = $choices['body'][ $body_slug ];
-
-	$google_families = array();
-
-	foreach ( array( $heading, $body ) as $font ) {
-		if ( empty( $font['google_family'] ) ) {
-			continue;
-		}
-
-		$key = $font['google_family'];
-		if ( ! isset( $google_families[ $key ] ) ) {
-			$google_families[ $key ] = array(
-				'family'  => $font['google_family'],
-				'weights' => $font['weights'],
-			);
-			continue;
-		}
-
-		$google_families[ $key ]['weights'] = array_values(
-			array_unique(
-				array_merge( $google_families[ $key ]['weights'], $font['weights'] )
-			)
-		);
-	}
-
 	return array(
-		'heading_slug'    => $heading_slug,
-		'body_slug'       => $body_slug,
-		'heading_stack'   => $heading['stack'],
-		'body_stack'      => $body['stack'],
-		'google_families' => array_values( $google_families ),
+		'heading_stack'   => bh_yabe_area_font_css_value( 'heading', (string) get_option( 'bh_typography_heading_font', get_option( 'bh_typography_heading_font', '' ) ) ),
+		'body_stack'      => bh_yabe_area_font_css_value( 'body', (string) get_option( 'bh_typography_body_font', get_option( 'bh_typography_body_font', '' ) ) ),
+		'google_families' => array(),
 	);
 }
 
@@ -263,27 +230,36 @@ add_action( 'admin_menu', 'bh_register_typography_settings_page' );
  * Register typography settings.
  */
 function bh_register_typography_settings() {
+	$areas = bh_typography_areas();
+	foreach ( $areas as $area => $css_var ) {
+		register_setting(
+			'bh-typography-settings',
+			'bh_typography_' . $area . '_font',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '',
+			)
+		);
+	}
+
+	// Legacy options kept for backward compatibility.
 	register_setting(
 		'bh-typography-settings',
 		'bh_typography_heading_font',
 		array(
 			'type'              => 'string',
-			'sanitize_callback' => function ( $value ) {
-				return bh_sanitize_typography_font( $value, 'heading' );
-			},
-			'default'           => 'theme-default',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '',
 		)
 	);
-
 	register_setting(
 		'bh-typography-settings',
 		'bh_typography_body_font',
 		array(
 			'type'              => 'string',
-			'sanitize_callback' => function ( $value ) {
-				return bh_sanitize_typography_font( $value, 'body' );
-			},
-			'default'           => 'system-ui',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => '',
 		)
 	);
 
@@ -291,62 +267,58 @@ function bh_register_typography_settings() {
 		'bh_typography_fonts',
 		__( 'Font families', 'brimstone-hill' ),
 		function () {
-			echo '<p class="description">' . esc_html__( 'Choose heading and body fonts for the site. Changes apply site-wide via theme CSS variables.', 'brimstone-hill' ) . '</p>';
+			if ( bh_yabe_webfont_is_active() ) {
+				echo '<p class="description">' . esc_html__( 'Assign Yabe Webfont families to each site area. Fonts are self-hosted by the Yabe Webfont plugin.', 'brimstone-hill' ) . '</p>';
+			} else {
+				echo '<p class="description">' . esc_html__( 'Install Yabe Webfont to choose self-hosted fonts. Until then, theme default stacks are used.', 'brimstone-hill' ) . '</p>';
+			}
 		},
 		'bh-typography-settings'
 	);
 
-	add_settings_field(
-		'bh_typography_heading_font',
-		__( 'Heading font', 'brimstone-hill' ),
-		'bh_render_typography_font_field',
-		'bh-typography-settings',
-		'bh_typography_fonts',
-		array(
-			'id'      => 'bh_typography_heading_font',
-			'group'   => 'heading',
-			'default' => 'theme-default',
-		)
+	$labels = array(
+		'heading'     => __( 'Headings', 'brimstone-hill' ),
+		'body'        => __( 'Body', 'brimstone-hill' ),
+		'site_header' => __( 'Site header', 'brimstone-hill' ),
+		'navigation'  => __( 'Navigation', 'brimstone-hill' ),
+		'footer'      => __( 'Footer', 'brimstone-hill' ),
+		'buttons'     => __( 'Buttons', 'brimstone-hill' ),
 	);
 
-	add_settings_field(
-		'bh_typography_body_font',
-		__( 'Body font', 'brimstone-hill' ),
-		'bh_render_typography_font_field',
-		'bh-typography-settings',
-		'bh_typography_fonts',
-		array(
-			'id'      => 'bh_typography_body_font',
-			'group'   => 'body',
-			'default' => 'system-ui',
-		)
-	);
+	foreach ( $labels as $area => $label ) {
+		add_settings_field(
+			'bh_typography_' . $area . '_font',
+			$label,
+			'bh_render_yabe_typography_field',
+			'bh-typography-settings',
+			'bh_typography_fonts',
+			array(
+				'id'   => 'bh_typography_' . $area . '_font',
+				'area' => $area,
+			)
+		);
+	}
 }
 add_action( 'admin_init', 'bh_register_typography_settings' );
 
 /**
- * Render a typography font select field.
+ * Render Yabe font family select.
  *
  * @param array $args Field args.
  */
-function bh_render_typography_font_field( $args ) {
-	$id      = $args['id'];
-	$group   = $args['group'];
-	$default = $args['default'];
-	$value   = get_option( $id, $default );
-	$choices = bh_typography_font_choices();
-
+function bh_render_yabe_typography_field( $args ) {
+	$id    = $args['id'];
+	$value = (string) get_option( $id, '' );
+	$choices = bh_yabe_font_choices();
 	printf( '<select id="%1$s" name="%1$s">', esc_attr( $id ) );
-
-	foreach ( $choices[ $group ] as $slug => $font ) {
+	foreach ( $choices as $slug => $label ) {
 		printf(
 			'<option value="%1$s" %2$s>%3$s</option>',
 			esc_attr( $slug ),
 			selected( $value, $slug, false ),
-			esc_html( $font['label'] )
+			esc_html( $label )
 		);
 	}
-
 	echo '</select>';
 }
 
@@ -360,21 +332,15 @@ function bh_typography_admin_enqueue( $hook_suffix ) {
 		return;
 	}
 
-	$settings = bh_get_typography_settings();
-	$url      = bh_typography_google_fonts_url( $settings['google_families'] );
-
 	wp_register_style( 'bh-typography-admin-preview', false, array(), BH_THEME_VERSION );
 	wp_enqueue_style( 'bh-typography-admin-preview' );
-
-	if ( $url ) {
-		wp_enqueue_style( 'bh-typography-admin-preview-fonts', $url, array( 'bh-typography-admin-preview' ), null );
-	}
-
+	wp_add_inline_style( 'bh-typography-admin-preview', bh_typography_inline_css() );
 	wp_add_inline_style(
 		'bh-typography-admin-preview',
 		'.bh-typography-preview { margin-top: 1.5rem; padding: 1.25rem; border: 1px solid #c3c4c7; background: #fff; max-width: 40rem; }
-		.bh-typography-preview__heading { font-family: ' . $settings['heading_stack'] . '; font-size: 1.75rem; margin: 0 0 0.5rem; }
-		.bh-typography-preview__body { font-family: ' . $settings['body_stack'] . '; margin: 0; line-height: 1.6; }'
+		.bh-typography-preview__heading { font-family: var(--font-heading); font-size: 1.75rem; margin: 0 0 0.5rem; }
+		.bh-typography-preview__body { font-family: var(--font-body); margin: 0; line-height: 1.6; }
+		.bh-typography-preview__nav { font-family: var(--font-navigation); margin: 0.5rem 0 0; }'
 	);
 }
 add_action( 'admin_enqueue_scripts', 'bh_typography_admin_enqueue' );
@@ -383,7 +349,6 @@ add_action( 'admin_enqueue_scripts', 'bh_typography_admin_enqueue' );
  * Render typography settings page.
  */
 function bh_render_typography_settings_page() {
-	$settings = bh_get_typography_settings();
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Typography Settings', 'brimstone-hill' ); ?></h1>
@@ -397,6 +362,7 @@ function bh_render_typography_settings_page() {
 		<div class="bh-typography-preview">
 			<p class="bh-typography-preview__heading"><?php esc_html_e( 'Brimstone Hill Fortress', 'brimstone-hill' ); ?></p>
 			<p class="bh-typography-preview__body"><?php esc_html_e( 'Explore a UNESCO World Heritage Site and plan your visit to St. Kitts.', 'brimstone-hill' ); ?></p>
+			<p class="bh-typography-preview__nav"><?php esc_html_e( 'Visit · Events · Support', 'brimstone-hill' ); ?></p>
 		</div>
 	</div>
 	<?php

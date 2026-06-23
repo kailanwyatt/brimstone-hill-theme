@@ -167,3 +167,15 @@ function bh_elementor_body_class( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'bh_elementor_body_class' );
+
+/**
+ * Register Elementor widgets.
+ */
+function bh_register_elementor_widgets( $widgets_manager ) {
+	if ( ! class_exists( 'BHFP_Accordion' ) ) {
+		return;
+	}
+	require_once BH_THEME_DIR . '/inc/elementor/class-bh-elementor-accordion.php';
+	$widgets_manager->register( new BH_Elementor_Accordion() );
+}
+add_action( 'elementor/widgets/register', 'bh_register_elementor_widgets' );

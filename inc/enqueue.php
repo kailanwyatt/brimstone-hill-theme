@@ -6,26 +6,11 @@
  */
 
 function bh_enqueue_typography_styles() {
-	$settings = bh_get_typography_settings();
-
-	$css = sprintf(
-		':root { --font-heading: %1$s; --font-body: %2$s; }',
-		$settings['heading_stack'],
-		$settings['body_stack']
-	);
-
-	wp_add_inline_style( 'bh-variables', $css );
+	wp_add_inline_style( 'bh-variables', bh_typography_inline_css() );
 }
 
 function bh_enqueue_scripts() {
-	$typography_settings = bh_get_typography_settings();
-	$google_fonts_url    = bh_typography_google_fonts_url( $typography_settings['google_families'] );
-	$variable_deps       = array();
-
-	if ( $google_fonts_url ) {
-		wp_enqueue_style( 'bh-google-fonts', $google_fonts_url, array(), null );
-		$variable_deps[] = 'bh-google-fonts';
-	}
+	$variable_deps = array();
 
 	// Enqueue base styles
 	wp_enqueue_style( 'bh-variables', BH_THEME_URI . '/assets/css/variables.css', $variable_deps, bh_asset_version( 'assets/css/variables.css' ) );

@@ -1,7 +1,7 @@
 .btn {
   display: inline-block;
   padding: var(--space-sm) var(--space-lg);
-  font-family: var(--font-body);
+  font-family: var(--font-buttons, var(--font-body));
   font-size: 0.9375rem;
   font-weight: 600;
   text-decoration: none;
@@ -151,7 +151,7 @@ button:focus-visible {
 
 .site-header__logo {
   flex: 0 0 auto;
-  font-family: var(--font-heading);
+  font-family: var(--font-site-header, var(--font-heading));
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-primary);
@@ -171,6 +171,7 @@ button:focus-visible {
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-sm);
+  font-family: var(--font-navigation, var(--font-body));
 }
 
 .site-header__book-btn {
@@ -525,6 +526,7 @@ body.mobile-nav-open {
   color: #fff;
   padding: var(--space-xl) var(--space-md) var(--space-lg);
   margin-top: var(--space-section);
+  font-family: var(--font-footer, var(--font-body));
 }
 
 /* Footer links stay light on dark background (override global primary link color). */
@@ -1132,6 +1134,15 @@ body.home {
 
 .accordion__trigger:hover {
   background: var(--color-bg-alt);
+}
+
+.accordion__title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.accordion__title-link:hover {
+  text-decoration: underline;
 }
 
 .accordion__trigger:focus {

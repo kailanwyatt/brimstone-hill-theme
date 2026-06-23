@@ -9,6 +9,10 @@
   --color-border: #ddd8d0;
   --font-heading: Georgia, 'Times New Roman', serif;
   --font-body: system-ui, -apple-system, sans-serif;
+  --font-site-header: var(--font-heading);
+  --font-navigation: var(--font-body);
+  --font-footer: var(--font-body);
+  --font-buttons: var(--font-body);
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;

@@ -83,10 +83,10 @@ function bh_normalize_button_label( $label ) {
  * @return string
  */
 function bh_book_tickets_label() {
-	if ( function_exists( 'bhfp_book_tickets_label' ) ) {
-		return bh_normalize_button_label( bhfp_book_tickets_label() );
+	if ( function_exists( 'bhfp_reservation_label' ) ) {
+		return bh_normalize_button_label( bhfp_reservation_label() );
 	}
-	return __( 'Book tickets', 'brimstone-hill' );
+	return __( 'Make a reservation', 'brimstone-hill' );
 }
 
 /**
