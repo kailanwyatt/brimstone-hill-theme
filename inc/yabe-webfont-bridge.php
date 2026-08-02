@@ -58,26 +58,30 @@ function bh_yabe_font_choices() {
 		'' => __( 'Theme default', 'brimstone-hill' ),
 	);
 
-	if ( ! bh_yabe_webfont_is_active() ) {
+	if ( ! bh_yabe_webfont_is_active() || ! method_exists( '\Yabe\Webfont\Utils\Font', 'get_fonts' ) ) {
 		return $choices;
 	}
 
-	$fonts = \Yabe\Webfont\Utils\Font::get_all();
+	$fonts = \Yabe\Webfont\Utils\Font::get_fonts();
 	if ( ! is_array( $fonts ) ) {
 		return $choices;
 	}
 
 	foreach ( $fonts as $font ) {
-		$name = '';
-		if ( is_array( $font ) && ! empty( $font['family'] ) ) {
-			$name = (string) $font['family'];
-		} elseif ( is_object( $font ) && isset( $font->family ) ) {
-			$name = (string) $font->family;
+		$family = '';
+		$label  = '';
+		if ( is_array( $font ) ) {
+			$family = ! empty( $font['family'] ) ? (string) $font['family'] : '';
+			$label  = ! empty( $font['title'] ) ? (string) $font['title'] : $family;
+		} elseif ( is_object( $font ) ) {
+			$family = isset( $font->family ) ? (string) $font->family : '';
+			$label  = isset( $font->title ) ? (string) $font->title : $family;
 		} elseif ( is_string( $font ) ) {
-			$name = $font;
+			$family = $font;
+			$label  = $font;
 		}
-		if ( '' !== $name ) {
-			$choices[ $name ] = $name;
+		if ( '' !== $family ) {
+			$choices[ $family ] = '' !== $label ? $label : $family;
 		}
 	}
 
@@ -95,7 +99,11 @@ function bh_yabe_area_font_css_value( $area, $family_name ) {
 	$defaults = bh_typography_default_stacks();
 	$fallback = isset( $defaults[ $area ] ) ? $defaults[ $area ] : $defaults['body'];
 
-	if ( '' === trim( (string) $family_name ) || ! bh_yabe_webfont_is_active() ) {
+	if (
+		'' === trim( (string) $family_name )
+		|| ! bh_yabe_webfont_is_active()
+		|| ! method_exists( '\Yabe\Webfont\Utils\Font', 'css_custom_property' )
+	) {
 		if ( 'navigation' === $area || 'site_header' === $area || 'footer' === $area || 'buttons' === $area ) {
 			return 'var(--font-body, ' . $fallback . ')';
 		}
