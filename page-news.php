@@ -117,41 +117,13 @@ $bh_recent_query = new WP_Query(
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<?php get_template_part( 'template-parts/page', 'header' ); ?>
 			<?php bh_render_page_content_shell_open(); ?>
-				<div class="content-page__body content-page__body--full">
+				<div class="content-page__body content-page__body--with-sidebar">
 					<p class="news-page__intro">
 						<?php esc_html_e( 'Latest news, updates, and stories from the fortress.', 'brimstone-hill' ); ?>
 					</p>
 
-					<div class="news-filters">
-						<div class="sidebar-card">
-							<h2 class="sidebar-card__title"><?php esc_html_e( 'Browse', 'brimstone-hill' ); ?></h2>
-							<div class="sidebar-group">
-								<h3 class="sidebar-group__title"><?php esc_html_e( 'Categories', 'brimstone-hill' ); ?></h3>
-								<ul class="sidebar-list sidebar-list--inline">
-									<li>
-										<a class="sidebar-filter<?php echo ! $bh_cat || 'all' === $bh_cat ? ' sidebar-filter--active' : ''; ?>" href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, '', $bh_tag ) ); ?>"><?php esc_html_e( 'All', 'brimstone-hill' ); ?></a>
-									</li>
-									<?php foreach ( $bh_categories as $bh_c ) : ?>
-										<li>
-											<a class="sidebar-filter<?php echo $bh_cat === $bh_c->slug ? ' sidebar-filter--active' : ''; ?>" href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, $bh_c->slug, $bh_tag ) ); ?>"><?php echo esc_html( $bh_c->name ); ?></a>
-										</li>
-									<?php endforeach; ?>
-								</ul>
-							</div>
-							<div class="sidebar-group">
-								<h3 class="sidebar-group__title"><?php esc_html_e( 'Tags', 'brimstone-hill' ); ?></h3>
-								<div class="sidebar-tags">
-									<a class="tag-chip<?php echo ! $bh_tag || 'all' === $bh_tag ? ' tag-chip--active' : ''; ?>" href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, $bh_cat, '' ) ); ?>"><?php esc_html_e( 'All', 'brimstone-hill' ); ?></a>
-									<?php foreach ( $bh_tags as $bh_t ) : ?>
-										<a class="tag-chip<?php echo $bh_tag === $bh_t->slug ? ' tag-chip--active' : ''; ?>" href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, $bh_cat, $bh_t->slug ) ); ?>"><?php echo esc_html( $bh_t->name ); ?></a>
-									<?php endforeach; ?>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="news-layout news-layout--single">
-						<div class="news-main">
+					<div class="news-layout">
+						<div class="news-main content-page__main">
 							<?php if ( $bh_featured ) : ?>
 								<?php
 								$bh_f_link = get_permalink( $bh_featured );
@@ -213,6 +185,68 @@ $bh_recent_query = new WP_Query(
 								<?php endforeach; ?>
 							</div>
 						</div>
+
+						<aside class="news-sidebar content-page__sidebar" aria-label="<?php esc_attr_e( 'News sidebar', 'brimstone-hill' ); ?>">
+							<div class="sidebar-card">
+								<h2 class="sidebar-card__title"><?php esc_html_e( 'Browse', 'brimstone-hill' ); ?></h2>
+
+								<div class="sidebar-group">
+									<h3 class="sidebar-group__title"><?php esc_html_e( 'Categories', 'brimstone-hill' ); ?></h3>
+									<ul class="sidebar-list">
+										<li>
+											<a
+												class="sidebar-filter<?php echo ! $bh_cat || 'all' === $bh_cat ? ' sidebar-filter--active' : ''; ?>"
+												href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, '', $bh_tag ) ); ?>"
+											><?php esc_html_e( 'All', 'brimstone-hill' ); ?></a>
+										</li>
+										<?php foreach ( $bh_categories as $bh_c ) : ?>
+											<li>
+												<a
+													class="sidebar-filter<?php echo $bh_cat === $bh_c->slug ? ' sidebar-filter--active' : ''; ?>"
+													href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, $bh_c->slug, $bh_tag ) ); ?>"
+												><?php echo esc_html( $bh_c->name ); ?></a>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
+
+								<div class="sidebar-group">
+									<h3 class="sidebar-group__title"><?php esc_html_e( 'Tags', 'brimstone-hill' ); ?></h3>
+									<div class="sidebar-tags">
+										<a
+											class="tag-chip<?php echo ! $bh_tag || 'all' === $bh_tag ? ' tag-chip--active' : ''; ?>"
+											href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, $bh_cat, '' ) ); ?>"
+										><?php esc_html_e( 'All', 'brimstone-hill' ); ?></a>
+										<?php foreach ( $bh_tags as $bh_t ) : ?>
+											<a
+												class="tag-chip<?php echo $bh_tag === $bh_t->slug ? ' tag-chip--active' : ''; ?>"
+												href="<?php echo esc_url( $bh_news_filter_url( $bh_archive_base, $bh_cat, $bh_t->slug ) ); ?>"
+											><?php echo esc_html( $bh_t->name ); ?></a>
+										<?php endforeach; ?>
+									</div>
+								</div>
+							</div>
+
+							<div class="sidebar-card">
+								<h2 class="sidebar-card__title"><?php esc_html_e( 'Recent posts', 'brimstone-hill' ); ?></h2>
+								<ol class="sidebar-recent">
+									<?php
+									if ( $bh_recent_query->have_posts() ) :
+										while ( $bh_recent_query->have_posts() ) :
+											$bh_recent_query->the_post();
+											?>
+											<li class="sidebar-recent__item">
+												<a class="sidebar-recent__link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+												<div class="sidebar-recent__meta"><?php echo esc_html( get_the_date( get_option( 'date_format' ) ) ); ?></div>
+											</li>
+											<?php
+										endwhile;
+										wp_reset_postdata();
+									endif;
+									?>
+								</ol>
+							</div>
+						</aside>
 					</div>
 				</div>
 			<?php bh_render_page_content_shell_close(); ?>

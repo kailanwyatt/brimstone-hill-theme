@@ -13,6 +13,7 @@ ZIP_XCLUSIONS := \
 	-x '$(THEME_SLUG)/*/.git/**/*' \
 	-x '$(THEME_SLUG)/node_modules/*' \
 	-x '$(THEME_SLUG)/node_modules/**/*' \
+	-x '$(THEME_SLUG)/clean_option.php' \
 	-x '$(THEME_SLUG)/bower_components/*' \
 	-x '$(THEME_SLUG)/bower_components/**/*' \
 	-x '*/.DS_Store' \

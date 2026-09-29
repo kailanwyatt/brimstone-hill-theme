@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!trigger || !panel) return;
             
-            trigger.addEventListener('click', () => {
+            const togglePanel = () => {
                 const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
                 
                 if (!allowMultiple && !isExpanded) {
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             otherTrigger.setAttribute('aria-expanded', 'false');
                             otherPanel.hidden = true;
                             otherPanel.classList.remove('accordion__panel--open');
+                            otherItem.classList.remove('is-open');
                         }
                     });
                 }
@@ -34,10 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 panel.hidden = isExpanded;
                 if (!isExpanded) {
                     panel.classList.add('accordion__panel--open');
+                    item.classList.add('is-open');
                 } else {
                     panel.classList.remove('accordion__panel--open');
+                    item.classList.remove('is-open');
                 }
-            });
+            };
+
+            trigger.addEventListener('click', togglePanel);
+
+            // Plain titles (no link) also expand/collapse when clicked.
+            const titleEl = item.querySelector('.accordion__title');
+            if (titleEl) {
+                titleEl.style.cursor = 'pointer';
+                titleEl.addEventListener('click', togglePanel);
+            }
         });
     });
 

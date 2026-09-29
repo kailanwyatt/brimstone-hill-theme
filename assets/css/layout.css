@@ -33,6 +33,30 @@ body {
   background: var(--color-bg);
 }
 
+h1 {
+  font-family: var(--font-h1, var(--font-heading));
+}
+
+h2 {
+  font-family: var(--font-h2, var(--font-heading));
+}
+
+h3 {
+  font-family: var(--font-h3, var(--font-heading));
+}
+
+h4 {
+  font-family: var(--font-h4, var(--font-heading));
+}
+
+h5 {
+  font-family: var(--font-h5, var(--font-heading));
+}
+
+h6 {
+  font-family: var(--font-h6, var(--font-heading));
+}
+
 /* Site-wide link colors (avoid browser default blue / visited purple).
    :where() keeps specificity at 0 so header/footer/nav overrides still win. */
 :where(a:not(.btn, .button, .wp-element-button)) {
@@ -94,6 +118,7 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
+  font-family: var(--font-breadcrumbs, var(--font-body));
   font-size: 0.8125rem;
   color: var(--color-text-muted);
 }
@@ -112,6 +137,7 @@ body {
 
 .breadcrumb__link {
   color: var(--color-text-muted);
+  font-family: var(--font-breadcrumbs, var(--font-body));
   text-decoration: none;
 }
 
@@ -121,6 +147,7 @@ body {
 
 .breadcrumb__current {
   color: var(--color-text);
+  font-family: var(--font-breadcrumbs, var(--font-body));
   font-weight: 600;
 }
 
@@ -168,7 +195,7 @@ body {
 }
 
 .page-banner__title {
-  font-family: var(--font-heading);
+  font-family: var(--font-page-banner-title, var(--font-h1, var(--font-heading)));
   font-size: clamp(1.5rem, 3.5vw, 2.25rem);
   margin: 0;
   color: #fff;
@@ -204,7 +231,7 @@ body {
 }
 
 .page-title {
-  font-family: var(--font-heading);
+  font-family: var(--font-h1, var(--font-heading));
   font-size: 1.75rem;
   margin-top: 0;
   margin-bottom: var(--space-xs);
@@ -239,6 +266,7 @@ body {
 /* Content links (scoped so nav/buttons keep their styling) */
 :where(.content-page__body, .content-page__main) a:not(.btn):not(.link--more):not(.link--back) {
   color: var(--color-primary);
+  font-family: var(--font-body-links, var(--font-body));
   text-decoration: none;
 }
 
@@ -278,7 +306,7 @@ body {
 
 @media (min-width: 980px) {
   .content-page__layout {
-    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
   }
 }
 

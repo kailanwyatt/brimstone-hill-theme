@@ -25,7 +25,7 @@ class BH_Elementor_Accordion extends \Elementor\Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return __( 'Plan Your Visit Accordion', 'brimstone-hill' );
+		return __( 'Accordion', 'brimstone-hill' );
 	}
 
 	/**

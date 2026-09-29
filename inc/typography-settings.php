@@ -230,8 +230,10 @@ add_action( 'admin_menu', 'bh_register_typography_settings_page' );
  * Register typography settings.
  */
 function bh_register_typography_settings() {
-	$areas = bh_typography_areas();
-	foreach ( $areas as $area => $css_var ) {
+	$config   = bh_typography_areas_config();
+	$sections = bh_typography_admin_sections();
+
+	foreach ( $config as $area => $meta ) {
 		register_setting(
 			'bh-typography-settings',
 			'bh_typography_' . $area . '_font',
@@ -263,35 +265,24 @@ function bh_register_typography_settings() {
 		)
 	);
 
-	add_settings_section(
-		'bh_typography_fonts',
-		__( 'Font families', 'brimstone-hill' ),
-		function () {
-			if ( bh_yabe_webfont_is_active() ) {
-				echo '<p class="description">' . esc_html__( 'Assign Yabe Webfont families to each site area. Fonts are self-hosted by the Yabe Webfont plugin.', 'brimstone-hill' ) . '</p>';
-			} else {
-				echo '<p class="description">' . esc_html__( 'Install Yabe Webfont to choose self-hosted fonts. Until then, theme default stacks are used.', 'brimstone-hill' ) . '</p>';
-			}
-		},
-		'bh-typography-settings'
-	);
+	foreach ( $sections as $section_id => $section ) {
+		add_settings_section(
+			'bh_typography_' . $section_id,
+			$section['title'],
+			function () use ( $section ) {
+				echo '<p class="description">' . esc_html( $section['description'] ) . '</p>';
+			},
+			'bh-typography-settings'
+		);
+	}
 
-	$labels = array(
-		'heading'     => __( 'Headings', 'brimstone-hill' ),
-		'body'        => __( 'Body', 'brimstone-hill' ),
-		'site_header' => __( 'Site header', 'brimstone-hill' ),
-		'navigation'  => __( 'Navigation', 'brimstone-hill' ),
-		'footer'      => __( 'Footer', 'brimstone-hill' ),
-		'buttons'     => __( 'Buttons', 'brimstone-hill' ),
-	);
-
-	foreach ( $labels as $area => $label ) {
+	foreach ( $config as $area => $meta ) {
 		add_settings_field(
 			'bh_typography_' . $area . '_font',
-			$label,
+			$meta['label'],
 			'bh_render_yabe_typography_field',
 			'bh-typography-settings',
-			'bh_typography_fonts',
+			'bh_typography_' . $meta['section'],
 			array(
 				'id'   => 'bh_typography_' . $area . '_font',
 				'area' => $area,
@@ -307,8 +298,8 @@ add_action( 'admin_init', 'bh_register_typography_settings' );
  * @param array $args Field args.
  */
 function bh_render_yabe_typography_field( $args ) {
-	$id    = $args['id'];
-	$value = (string) get_option( $id, '' );
+	$id      = $args['id'];
+	$value   = (string) get_option( $id, '' );
 	$choices = bh_yabe_font_choices();
 	printf( '<select id="%1$s" name="%1$s">', esc_attr( $id ) );
 	foreach ( $choices as $slug => $label ) {
@@ -352,6 +343,11 @@ function bh_render_typography_settings_page() {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Typography Settings', 'brimstone-hill' ); ?></h1>
+		<?php if ( function_exists( 'bh_yabe_webfont_is_active' ) && bh_yabe_webfont_is_active() ) : ?>
+			<p><?php esc_html_e( 'Assign Yabe Webfont families per area. Leave on Theme default to inherit the base stack.', 'brimstone-hill' ); ?></p>
+		<?php else : ?>
+			<p><?php esc_html_e( 'Install Yabe Webfont to choose self-hosted fonts. Until then, theme default stacks are used.', 'brimstone-hill' ); ?></p>
+		<?php endif; ?>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( 'bh-typography-settings' );
@@ -361,7 +357,7 @@ function bh_render_typography_settings_page() {
 		</form>
 		<div class="bh-typography-preview">
 			<p class="bh-typography-preview__heading"><?php esc_html_e( 'Brimstone Hill Fortress', 'brimstone-hill' ); ?></p>
-			<p class="bh-typography-preview__body"><?php esc_html_e( 'Explore a UNESCO World Heritage Site and plan your visit to St. Kitts.', 'brimstone-hill' ); ?></p>
+			<p class="bh-typography-preview__body"><?php esc_html_e( 'Explore a UNESCO World Heritage Site and plan your visit to St. Kitts.', 'brimstone-hill' ); ?> <a href="#"><?php esc_html_e( 'Learn more', 'brimstone-hill' ); ?></a></p>
 			<p class="bh-typography-preview__nav"><?php esc_html_e( 'Visit · Events · Support', 'brimstone-hill' ); ?></p>
 		</div>
 	</div>

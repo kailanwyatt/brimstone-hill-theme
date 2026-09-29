@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $has_banner  = has_post_thumbnail();
-$is_contact  = is_page_template( 'page-contact.php' );
+$is_contact  = function_exists( 'bh_is_contact_page' ) ? bh_is_contact_page() : ( is_page_template( 'page-contact.php' ) || is_page( 'contact' ) );
 $align       = bh_get_page_title_align();
 $align_class = 'page-title--align-' . $align;
 $crumb_class = 'breadcrumb-wrap--align-' . $align;

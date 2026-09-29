@@ -93,12 +93,21 @@ function bh_save_page_settings_metabox( $post_id ) {
 add_action( 'save_post_page', 'bh_save_page_settings_metabox' );
 
 /**
+ * Contact uses a slug template, which is_page_template() does not detect on its own.
+ *
+ * @return bool
+ */
+function bh_is_contact_page() {
+	return is_page_template( 'page-contact.php' ) || is_page( 'contact' );
+}
+
+/**
  * Open the content shell after a page banner (container + column).
  *
  * page-header.php opens this wrapper automatically when there is no banner.
  */
 function bh_render_page_content_shell_open() {
-	if ( is_page_template( 'page-contact.php' ) || ! has_post_thumbnail() ) {
+	if ( bh_is_contact_page() || ! has_post_thumbnail() ) {
 		return;
 	}
 
@@ -109,7 +118,7 @@ function bh_render_page_content_shell_open() {
  * Close the page content shell opened by page-header or bh_render_page_content_shell_open().
  */
 function bh_render_page_content_shell_close() {
-	if ( is_page_template( 'page-contact.php' ) ) {
+	if ( bh_is_contact_page() ) {
 		if ( ! has_post_thumbnail() ) {
 			echo '</div></div>';
 		}

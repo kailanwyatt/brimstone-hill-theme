@@ -30,7 +30,7 @@ function bh_enqueue_scripts() {
 		wp_enqueue_script( 'bh-woocommerce-custom', BH_THEME_URI . '/assets/js/woocommerce-custom.js', array(), bh_asset_version( 'assets/js/woocommerce-custom.js' ), true );
 	}
 
-	if ( is_page_template( 'page-book-tickets.php' ) ) {
+	if ( is_page_template( 'page-book-tickets.php' ) || is_page( 'book-tickets' ) ) {
 		wp_enqueue_script( 'bh-book-tickets', BH_THEME_URI . '/assets/js/book-tickets.js', array(), bh_asset_version( 'assets/js/book-tickets.js' ), true );
 		$tiers_payload = array( '0' => array() );
 		if ( class_exists( 'BHFP_Booking_Public' ) ) {
@@ -86,6 +86,15 @@ function bh_enqueue_scripts() {
 
 	if ( is_singular( 'bhfp_gallery' ) ) {
 		wp_enqueue_script( 'bh-gallery-lightbox', BH_THEME_URI . '/assets/js/gallery-lightbox.js', array(), bh_asset_version( 'assets/js/gallery-lightbox.js' ), true );
+	}
+
+	if ( is_page_template( 'page-membership.php' ) || is_page( array( 'membership', 'member' ) ) ) {
+		wp_enqueue_script( 'bh-membership', BH_THEME_URI . '/assets/js/membership.js', array(), bh_asset_version( 'assets/js/membership.js' ), true );
+	}
+
+	$post = get_post();
+	if ( $post instanceof WP_Post && ( has_block( 'bhfp/team-members', $post ) || has_shortcode( $post->post_content, 'bhfp_team_listing' ) ) ) {
+		wp_enqueue_script( 'bh-team-members', BH_THEME_URI . '/assets/js/team-members.js', array(), bh_asset_version( 'assets/js/team-members.js' ), true );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'bh_enqueue_scripts' );
