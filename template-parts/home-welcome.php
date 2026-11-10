@@ -53,7 +53,9 @@ $hours_url  = home_url( '/visit/hours-admission/' );
 				</p>
 			<?php endif; ?>
 			<div class="welcome-section__actions">
+				<?php if ( ! function_exists( 'bhfp_ecommerce_is_paused' ) || ! bhfp_ecommerce_is_paused() ) : ?>
 				<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="btn btn--primary"><?php echo esc_html( bh_book_tickets_label() ); ?></a>
+				<?php endif; ?>
 				<a href="<?php echo esc_url( home_url( '/visit/plan-your-visit' ) ); ?>" class="btn btn--secondary"><?php esc_html_e( 'Plan your visit', 'brimstone-hill' ); ?></a>
 				<a href="<?php echo esc_url( home_url( '/events/whats-on' ) ); ?>" class="btn btn--secondary"><?php esc_html_e( "What's on", 'brimstone-hill' ); ?></a>
 			</div>

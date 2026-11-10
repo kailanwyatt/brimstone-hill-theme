@@ -47,9 +47,11 @@
 			<?php endif; ?>
 		</div>
 
+		<?php if ( ! function_exists( 'bhfp_ecommerce_is_paused' ) || ! bhfp_ecommerce_is_paused() ) : ?>
 		<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="site-header__book-btn btn btn--primary">
 			<?php echo esc_html( bh_book_tickets_label() ); ?>
 		</a>
+		<?php endif; ?>
 
 		<button type="button" class="site-header__menu-btn" aria-label="Open menu" aria-expanded="false">
 			<span class="site-header__menu-icon"></span>

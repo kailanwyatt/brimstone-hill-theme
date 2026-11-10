@@ -75,7 +75,15 @@ function bh_footer_nav_columns() {
 		),
 	);
 
-	return apply_filters( 'bh_footer_nav_columns', $columns );
+	$columns = apply_filters( 'bh_footer_nav_columns', $columns );
+	if ( function_exists( 'bh_filter_paused_sales_links' ) ) {
+		foreach ( $columns as $index => $column ) {
+			if ( isset( $column['links'] ) && is_array( $column['links'] ) ) {
+				$columns[ $index ]['links'] = bh_filter_paused_sales_links( $column['links'] );
+			}
+		}
+	}
+	return $columns;
 }
 
 /**

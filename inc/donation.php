@@ -96,6 +96,9 @@ add_filter( 'woocommerce_add_to_cart_validation', 'bh_donation_validate_add_to_c
  */
 function bh_donation_validate_add_to_cart( $passed, $product_id, $quantity, $variation_id = 0, $cart_item_data = array() ) {
 	unset( $variation_id, $cart_item_data );
+	if ( function_exists( 'bhfp_ecommerce_is_paused' ) && bhfp_ecommerce_is_paused() ) {
+		return false;
+	}
 	if ( ! bh_is_donation_product( $product_id ) ) {
 		return $passed;
 	}

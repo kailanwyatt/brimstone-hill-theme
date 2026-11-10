@@ -127,7 +127,7 @@ while ( have_posts() ) :
 						<p><strong><?php esc_html_e( 'Type', 'brimstone-hill' ); ?>:</strong> <?php echo esc_html( $kind ); ?></p>
 						<p><strong><?php esc_html_e( 'Attendance', 'brimstone-hill' ); ?>:</strong> <?php echo esc_html( $attendance_label ); ?></p>
 						<p class="single-event__actions">
-							<?php if ( function_exists( 'bhfp_event_shows_book_tickets_cta' ) && bhfp_event_shows_book_tickets_cta( $event_id ) ) : ?>
+							<?php if ( ( ! function_exists( 'bhfp_ecommerce_is_paused' ) || ! bhfp_ecommerce_is_paused() ) && function_exists( 'bhfp_event_shows_book_tickets_cta' ) && bhfp_event_shows_book_tickets_cta( $event_id ) ) : ?>
 								<a class="btn btn--primary btn--sm" href="<?php echo esc_url( bhfp_event_book_tickets_url( $event_id ) ); ?>"><?php echo esc_html( function_exists( 'bhfp_book_tickets_label' ) ? bhfp_book_tickets_label() : __( 'Book tickets', 'brimstone-hill' ) ); ?></a>
 							<?php endif; ?>
 							<a class="btn btn--secondary btn--sm" href="<?php echo esc_url( $calendar_url ); ?>"><?php esc_html_e( 'View calendar', 'brimstone-hill' ); ?></a>

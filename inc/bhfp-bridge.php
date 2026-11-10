@@ -126,7 +126,7 @@ function bh_tripadvisor_url() {
  */
 function bh_default_footer_links() {
 	if ( function_exists( 'bhfp_page_url' ) ) {
-		return array(
+		$links = array(
 			array( 'label' => __( 'Visit', 'brimstone-hill' ), 'url' => bhfp_page_url( 'visit' ) ),
 			array( 'label' => bh_book_tickets_label(), 'url' => bh_book_tickets_url() ),
 			array( 'label' => __( 'Member', 'brimstone-hill' ), 'url' => bhfp_page_url( 'get-involved/member' ) ),
@@ -134,13 +134,35 @@ function bh_default_footer_links() {
 			array( 'label' => __( 'About', 'brimstone-hill' ), 'url' => bhfp_page_url( 'about' ) ),
 			array( 'label' => __( 'Contact', 'brimstone-hill' ), 'url' => bhfp_page_url( 'about/contact' ) ),
 		);
+	} else {
+		$links = array(
+			array( 'label' => __( 'Visit', 'brimstone-hill' ), 'url' => home_url( '/visit/' ) ),
+			array( 'label' => bh_book_tickets_label(), 'url' => bh_book_tickets_url() ),
+			array( 'label' => __( 'Member', 'brimstone-hill' ), 'url' => home_url( '/get-involved/member/' ) ),
+			array( 'label' => __( 'Donate', 'brimstone-hill' ), 'url' => home_url( '/get-involved/donate/' ) ),
+			array( 'label' => __( 'About', 'brimstone-hill' ), 'url' => home_url( '/about/' ) ),
+			array( 'label' => __( 'Contact', 'brimstone-hill' ), 'url' => home_url( '/about/contact/' ) ),
+		);
 	}
-	return array(
-		array( 'label' => __( 'Visit', 'brimstone-hill' ), 'url' => home_url( '/visit/' ) ),
-		array( 'label' => bh_book_tickets_label(), 'url' => bh_book_tickets_url() ),
-		array( 'label' => __( 'Member', 'brimstone-hill' ), 'url' => home_url( '/get-involved/member/' ) ),
-		array( 'label' => __( 'Donate', 'brimstone-hill' ), 'url' => home_url( '/get-involved/donate/' ) ),
-		array( 'label' => __( 'About', 'brimstone-hill' ), 'url' => home_url( '/about/' ) ),
-		array( 'label' => __( 'Contact', 'brimstone-hill' ), 'url' => home_url( '/about/contact/' ) ),
-	);
+	return bh_filter_paused_sales_links( $links );
+}
+
+/**
+ * Remove booking, donation, and membership links while public sales are paused.
+ *
+ * @param array<int, array{label:string,url:string}> $links Links.
+ * @return array<int, array{label:string,url:string}>
+ */
+function bh_filter_paused_sales_links( $links ) {
+	if ( ! function_exists( 'bhfp_ecommerce_is_paused' ) || ! bhfp_ecommerce_is_paused() || ! class_exists( 'BHFP_Storefront_Pause' ) ) {
+		return $links;
+	}
+	$kept = array();
+	foreach ( $links as $link ) {
+		if ( empty( $link['url'] ) || BHFP_Storefront_Pause::url_is_sales( $link['url'] ) ) {
+			continue;
+		}
+		$kept[] = $link;
+	}
+	return $kept;
 }

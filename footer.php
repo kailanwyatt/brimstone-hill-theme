@@ -30,9 +30,11 @@ $tripadvisor   = function_exists( 'bh_tripadvisor_url' ) ? bh_tripadvisor_url() 
 				<?php if ( '' !== $about_text ) : ?>
 					<p class="site-footer__about"><?php echo esc_html( $about_text ); ?></p>
 				<?php endif; ?>
+				<?php if ( ! function_exists( 'bhfp_ecommerce_is_paused' ) || ! bhfp_ecommerce_is_paused() ) : ?>
 				<p class="site-footer__cta">
 					<a href="<?php echo esc_url( bh_book_tickets_url() ); ?>" class="btn btn--secondary btn--sm"><?php echo esc_html( bh_book_tickets_label() ); ?></a>
 				</p>
+				<?php endif; ?>
 				<?php if ( function_exists( 'bh_render_social_links' ) ) : ?>
 					<div class="site-footer__social site-footer__social--icons">
 						<?php bh_render_social_links( array( 'class' => 'bh-social--footer' ) ); ?>
